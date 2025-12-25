@@ -8,7 +8,7 @@
       <div class="text-center text-xs">
         Made with ❤️ by
         <a
-          href="https://threads.net/@cjs.shawn"
+          href="https://github.com/jschang19"
           target="_blank"
           rel="noopener noreferrer"
           class="hover:underline"
