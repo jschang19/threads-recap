@@ -5,7 +5,6 @@
       v-if="appStage === 'landing'"
       class="min-h-[80vh] flex flex-col"
     >
-      <BlurBackground />
       <!-- Hero Section -->
       <section class="flex-1 flex flex-col items-center justify-center px-4 py-12 text-center">
         <div class="max-w-2xl mx-auto space-y-8 h-full flex flex-col justify-center">

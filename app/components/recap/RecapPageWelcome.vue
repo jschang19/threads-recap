@@ -1,6 +1,5 @@
 <template>
   <div class="min-h-[70vh] flex flex-col items-center justify-center px-4 py-8 relative overflow-hidden">
-    <BlurBackground />
 
     <div class="text-center space-y-8 max-w-lg mx-auto relative z-10">
       <!-- Year Badge -->

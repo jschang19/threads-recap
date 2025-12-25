@@ -6,7 +6,7 @@
       <div class="space-y-2 pt-24 md:pt-6">
         <Motion
           :initial="{ opacity: 0, y: -30, filter: 'blur(10px)' }"
-          :animate="{ opacity: 1, y: 0, filter: 'blur(0px)' }"
+          :animate="{ opacity: 1, y: 0, filter: 'none' }"
           :transition="{ 
             duration: 0.7, 
             delay: 0.1, 
@@ -23,7 +23,7 @@
       <div class="space-y-4">
         <Motion
           :initial="{ opacity: 0, scale: 0.5, filter: 'blur(20px)' }"
-          :animate="{ opacity: 1, scale: 1, filter: 'blur(0px)' }"
+          :animate="{ opacity: 1, scale: 1, filter: 'none' }"
           :transition="{ 
             duration: 0.7, 
             delay: 1.3, 
@@ -45,7 +45,7 @@
       <div class="py-10 space-y-4">
         <Motion
           :initial="{ opacity: 0, y: 20, filter: 'blur(8px)' }"
-          :animate="{ opacity: 1, y: 0, filter: 'blur(0px)' }"
+          :animate="{ opacity: 1, y: 0, filter: 'none'  }"
           :transition="{ 
             duration: 0.6, 
             delay: 2.3, 
@@ -59,7 +59,7 @@
         <div class="grid grid-cols-3 gap-2 md:gap-3">
           <Motion
             :initial="{ opacity: 0, y: 30, scale: 0.9, filter: 'blur(8px)' }"
-            :animate="{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }"
+            :animate="{ opacity: 1, y: 0, scale: 1, filter: 'none' }"
             :transition="{ 
               duration: 0.5, 
               delay: 2.4, 
@@ -75,7 +75,7 @@
           </Motion>
           <Motion
             :initial="{ opacity: 0, y: 30, scale: 0.9, filter: 'blur(8px)' }"
-            :animate="{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }"
+            :animate="{ opacity: 1, y: 0, scale: 1, filter: 'none' }"
             :transition="{ 
               duration: 0.5, 
               delay: 2.5, 
@@ -91,7 +91,7 @@
           </Motion>
           <Motion
             :initial="{ opacity: 0, y: 30, scale: 0.9, filter: 'blur(8px)' }"
-            :animate="{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }"
+            :animate="{ opacity: 1, y: 0, scale: 1, filter: 'none' }"
             :transition="{ 
               duration: 0.5, 
               delay: 2.6, 
