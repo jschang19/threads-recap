@@ -119,6 +119,7 @@
     <RecapContainer v-else-if="appStage === 'recap'" />
         <!-- Upload Dialog -->
     <UploadDialog
+      v-if="appStage === 'landing'"
       v-model:open="showUploadDialog"
       @success="handleUploadSuccess"
     />
