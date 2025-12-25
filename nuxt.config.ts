@@ -3,6 +3,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  appId: 'tks-recap',
   compatibilityDate: '2025-12-25',
   spaLoadingTemplate: true,
   css: ['~/assets/css/tailwind.css'],
@@ -12,4 +13,7 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+  nitro: {
+    compressPublicAssets: true,
+  }
 })
