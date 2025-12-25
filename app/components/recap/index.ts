@@ -1,0 +1,10 @@
+export { default as UploadDialog } from './UploadDialog.vue';
+export { default as LoadingScreen } from './LoadingScreen.vue';
+export { default as RecapContainer } from './RecapContainer.vue';
+export { default as RecapCard } from './RecapCard.vue';
+export { default as RecapPage1 } from './RecapPage1.vue';
+export { default as RecapPage2 } from './RecapPage2.vue';
+export { default as RecapPage3 } from './RecapPage3.vue';
+export { default as RecapPage4 } from './RecapPage4.vue';
+export { default as RecapPage5 } from './RecapPage5.vue';
+

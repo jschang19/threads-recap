@@ -1,0 +1,41 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxtjs/color-mode": "^3.5.2",
+    "@vueuse/core": "^14.1.0",
+    "chart.js": "^4.5.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "d3": "^7.9.0",
+    "jieba-wasm": "^2.4.0",
+    "lucide-vue-next": "^0.469.0",
+    "motion-v": "^1.7.4",
+    "nuxt": "^4.2.2",
+    "radix-vue": "^1.9.17",
+    "reka-ui": "^2.7.0",
+    "shadcn-nuxt": "2.4.3",
+    "tailwind-merge": "^2.6.0",
+    "tailwindcss-animate": "^1.0.7",
+    "vaul-vue": "^0.4.1",
+    "vue": "latest",
+    "vue-chartjs": "^5.3.3",
+    "vue-router": "latest",
+    "vue-sonner": "^2.0.9"
+  },
+  "packageManager": "pnpm@8.14.3+sha512.c3ed80eb583be3e2b7ef31eb96b8b9cfaa0503e5d44ec717514120b5187b2f933736e9038c51a5a23ad582790ba41d4ab784618c89fa7e2365f6665685d612ee",
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.18",
+    "@types/d3": "^7.4.3",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.9.3"
+  }
+}
