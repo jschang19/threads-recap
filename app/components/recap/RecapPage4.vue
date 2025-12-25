@@ -145,25 +145,12 @@
 import { Motion } from 'motion-v';
 import { Heart, Bookmark, UserRoundPlus, BellPlus } from 'lucide-vue-next';
 import type { RecapAnalysisResult } from '~/types/threads';
-import { AreaChart } from '~/components/charts';
 
 interface Props {
   result: RecapAnalysisResult;
 }
 
 const props = defineProps<Props>();
-
-const MONTH_LABELS = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
-
-const monthLabels = MONTH_LABELS;
-
-const followerGrowthData = computed(() => {
-  return props.result.social.followerGrowthByMonth.map(item => item.cumulative);
-});
-
-const hasFollowerGrowth = computed(() => {
-  return props.result.social.newFollowersIn2025 > 0;
-});
 
 const avgDailyLikes = computed(() => {
   // Assuming data is for 2025
