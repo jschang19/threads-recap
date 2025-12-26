@@ -3,30 +3,40 @@ import tailwindcss from '@tailwindcss/vite';
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   appId: 'tks-recap',
-  modules: ['shadcn-nuxt', 'motion-v/nuxt', '@nuxt/eslint'],
-  ssr: false,
-  devtools: { enabled: true },
-  css: ['~/assets/css/tailwind.css'],
-  spaLoadingTemplate: true,
-  runtimeConfig: {
-    public: {
-      siteHost: process.env.SITE_HOST || 'https://recap.threadseeker.com',
-    },
-  },
   compatibilityDate: '2025-12-25',
-  nitro: {
-    compressPublicAssets: true,
-  },
-  vite: {
-    plugins: [tailwindcss()],
-  },
+  css: ['~/assets/css/tailwind.css'],
+  devtools: { enabled: true },
   eslint: {
     config: {
       stylistic: {
+        indent: 2,
         quotes: 'single',
         semi: true,
-        indent: 2,
       },
     },
+  },
+  modules: ['@nuxt/eslint', '@nuxt/scripts', 'motion-v/nuxt', 'shadcn-nuxt'],
+  nitro: {
+    compressPublicAssets: true,
+  },
+  runtimeConfig: {
+    public: {
+      scripts:{
+        clarity: {
+          id: process.env.NUXT_PUBLIC_SCRIPTS_CLARITY_ID || '',
+        },
+      },
+      siteHost: process.env.SITE_HOST || 'https://recap.threadseeker.com',
+    },
+  },
+  scripts:{
+    registry: {
+      clarity: true
+    }
+  },
+  spaLoadingTemplate: true,
+  ssr: false,
+  vite: {
+    plugins: [tailwindcss()],
   },
 });
