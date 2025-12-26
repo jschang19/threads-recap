@@ -17,84 +17,31 @@
       </Transition>
     </div>
 
-    <!-- Navigation -->
-    <div class="py-6 px-4">
-      <div class="max-w-md mx-auto">
-        <!-- Page Indicators -->
-        <div class="flex justify-center gap-2 mb-4">
-          <button
-            v-for="page in totalRecapPages"
-            :key="page"
-            class="w-2.5 h-2.5 rounded-full transition-all duration-300"
-            :class="{
-              'bg-foreground w-6': page === currentRecapPage,
-              'bg-muted-foreground/30 hover:bg-muted-foreground/50': page !== currentRecapPage,
-            }"
-            @click="handlePageClick(page)"
-          />
-        </div>
-
-        <!-- Desktop Arrow Key Hint -->
-        <Transition name="fade">
-          <div
-            v-if="!isMobile && showKeyHint"
-            class="flex items-center justify-center gap-2 text-muted-foreground text-sm mb-4"
-          >
-            <kbd class="px-2 py-1 bg-muted rounded text-xs font-mono">←</kbd>
-            <span>或</span>
-            <kbd class="px-2 py-1 bg-muted rounded text-xs font-mono">→</kbd>
-            <span>切換頁面</span>
-          </div>
-        </Transition>
-
-        <!-- Mobile Swipe Hint -->
-        <Transition name="fade">
-          <div
-            v-if="isMobile && showSwipeHint"
-            class="flex items-center justify-center gap-2 text-muted-foreground text-sm mb-4"
-          >
-            <ChevronLeft class="w-4 h-4" />
-            <span>左右滑動切換</span>
-            <ChevronRight class="w-4 h-4" />
-          </div>
-        </Transition>
-
-        <!-- Restart Button (on last page) -->
-        <div
-          v-if="currentRecapPage === totalRecapPages"
-          class="pt-3 space-y-2"
-        >
-          <Button
-            variant="default"
-            class="w-full h-12"
-            @click="handleToFirstPage"
-          >
-            重新開始
-          </Button>
-          <Button
-            variant="ghost"
-            class="w-full h-12"
-            @click="handleRestart"
-          >
-            建立新的回顧
-          </Button>
-        </div>
-      </div>
-    </div>
+    <RecapNavigation
+      :current-recap-page="currentRecapPage"
+      :total-recap-pages="totalRecapPages"
+      :is-mobile="isMobile"
+      :show-key-hint="showKeyHint"
+      :show-swipe-hint="showSwipeHint"
+      @page-click="handlePageClick"
+      @to-first-page="handleToFirstPage"
+      @restart="handleRestart"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useSwipe, onKeyStroke, useMediaQuery } from '@vueuse/core';
-import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
-import { Button } from '~/components/ui/button';
-import RecapPageWelcome from './RecapPageWelcome.vue';
-import RecapPage1 from './RecapPage1.vue';
-import RecapPage2 from './RecapPage2.vue';
-import RecapPage2A from './RecapPage2A.vue';
-import RecapPage3 from './RecapPage3.vue';
-import RecapPage4 from './RecapPage4.vue';
-import RecapPage5 from './RecapPage5.vue';
+import RecapNavigation from './recap-navigation.vue';
+import { 
+  RecapWelcomePage,
+  RecapTotalPosts,
+  RecapTotalWords,
+  RecapMentionKeywords,
+  RecapStatGraphs,
+  RecapEngagements,
+  RecapFinalResult,
+} from './stage';
 
 const {
   currentRecapPage,
@@ -109,7 +56,7 @@ const {
   setStage,
 } = useRecapStore();
 
-const pages = [RecapPageWelcome, RecapPage1, RecapPage2, RecapPage2A, RecapPage3, RecapPage4, RecapPage5];
+const pages = [RecapWelcomePage, RecapTotalPosts, RecapTotalWords, RecapMentionKeywords, RecapStatGraphs, RecapEngagements, RecapFinalResult];
 const currentPageComponent = computed(() => pages[currentRecapPage.value - 1]);
 
 const containerRef = ref<HTMLElement | null>(null);
@@ -219,17 +166,6 @@ function handlePageClick(page: number) {
 
 .slide-right-leave-to {
   transform: translateX(30px);
-  opacity: 0;
-}
-
-/* Fade transition for hints */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
   opacity: 0;
 }
 </style>

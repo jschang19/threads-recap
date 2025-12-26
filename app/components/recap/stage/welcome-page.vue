@@ -26,7 +26,7 @@
             }"
             class="inline-flex"
           >
-            <Sparkles class="w-4 h-4" />
+            <Sparkle class="w-4 h-4" />
           </Motion>
           <span>2025 Threads Recap</span>
         </div>
@@ -70,6 +70,6 @@
 </template>
 
 <script setup lang="ts">
-import { Sparkles } from 'lucide-vue-next';
+import { Sparkle } from 'lucide-vue-next';
 import { Motion } from 'motion-v';
 </script>

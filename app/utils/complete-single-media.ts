@@ -1,5 +1,6 @@
 import type { ThreadPostMedia } from '~/types/threads';
 
+// To set the creation_timestamp and title for the post with single media object
 export function completeSingleMedia(post: {
   media: ThreadPostMedia[];
   title?: string;

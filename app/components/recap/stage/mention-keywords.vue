@@ -1,6 +1,5 @@
 <template>
   <div class="min-h-[70vh] flex flex-col items-center justify-center px-4 pt-24 pb-8">
-    <BlurBackground />
     <div class="text-center space-y-8 max-w-lg mx-auto w-full">
       <!-- Top Mentions -->
       <div
@@ -10,17 +9,15 @@
         <Motion
           :initial="{ opacity: 0, y: -30, filter: 'blur(10px)' }"
           :animate="{ opacity: 1, y: 0, filter: 'blur(0px)' }"
-          :transition="{
-            duration: 0.7,
-            delay: 0.1,
+          :transition="{ 
+            duration: 0.7, 
+            delay: 0.1, 
             type: 'spring',
             stiffness: 100,
-            damping: 15,
+            damping: 15
           }"
         >
-          <h3 class="text-2xl font-semibold">
-            你最常 @ 這些人
-          </h3>
+          <h3 class="text-2xl font-semibold">你最常 @ 這些人</h3>
         </Motion>
         <div class="flex flex-wrap justify-center gap-3">
           <Motion
@@ -39,12 +36,12 @@
             :key="mention.username"
             :initial="{ opacity: 0, y: 20, scale: 0.9, filter: 'blur(8px)' }"
             :animate="{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }"
-            :transition="{
-              duration: 0.5,
-              delay: 0.3 + index * 0.15,
+            :transition="{ 
+              duration: 0.5, 
+              delay: 0.3 + index * 0.15, 
               type: 'spring',
               stiffness: 120,
-              damping: 15,
+              damping: 15
             }"
           >
             <a
@@ -68,17 +65,15 @@
         <Motion
           :initial="{ opacity: 0, y: -20, filter: 'blur(10px)' }"
           :animate="{ opacity: 1, y: 0, filter: 'blur(0px)' }"
-          :transition="{
-            duration: 0.7,
-            delay: 0.8,
+          :transition="{ 
+            duration: 0.7, 
+            delay: 0.8, 
             type: 'spring',
             stiffness: 100,
-            damping: 15,
+            damping: 15
           }"
         >
-          <h3 class="text-2xl font-semibold">
-            你最常用這些字
-          </h3>
+          <h3 class="text-2xl font-semibold">你最常用這些字</h3>
         </Motion>
         <Motion
           v-if="result.text.topKeywords.length === 0"
@@ -99,12 +94,12 @@
             :key="k.keyword"
             :initial="{ opacity: 0, scale: 0.8, filter: 'blur(6px)' }"
             :animate="{ opacity: 1, scale: 1, filter: 'blur(0px)' }"
-            :transition="{
-              duration: 0.4,
-              delay: 1.0 + index * 0.08,
+            :transition="{ 
+              duration: 0.4, 
+              delay: 1.0 + index * 0.08, 
               type: 'spring',
               stiffness: 150,
-              damping: 12,
+              damping: 12
             }"
           >
             <span

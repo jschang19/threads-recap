@@ -59,3 +59,33 @@ export const FUN_FACTS_CONSTANTS = {
   THESIS_WORDS: 15000, // Average thesis word count
   CHOU_TSE_WORDS: 700, // CHOU TSE word count (出師表)
 };
+
+
+export const LINKS = {
+  TUTORIAL: 'https://reurl.cc/KOqXd9',
+  REPO: 'https://github.com/jschang19/threads-recap',
+};
+
+export const MOCK_DEMO_DATA = {
+  postsCount: 365,
+  totalWordCount: 28420,
+  likesCount: 1034,
+  newFollowersCount: 89,
+  peakMonthName: '九月',
+  mostActiveDay: '星期五',
+  topMention: 'zuck',
+  topKeywords: ['單身', '感情', '爛台大'],
+};
+
+// const title = 'Threads 2025 年度總回顧 - Threadseeker';
+// const description
+//   = '用 Threadseeker Recap 來建立你的 threads.com 2025 年度回顧紀錄！幫你分析這一整年在脆的發文紀錄與數據，還有最常提及的朋友與打的關鍵字。';
+// const keywords = 'threads';
+// const ogImagePath = '/images/banner.webp';
+
+export const SEO_CONFIG = {
+  title: 'Threads 2025 年度總回顧 - Threadseeker',
+  description: '用 Threadseeker Recap 來建立你的 threads.com 2025 年度回顧紀錄！幫你分析這一整年在脆的發文紀錄與數據，還有最常提及的朋友與打的關鍵字。',
+  keywords: 'threads',
+  ogImagePath: '/images/banner.webp',
+};

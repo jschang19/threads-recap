@@ -73,7 +73,7 @@
           >
             <div class="p-4 rounded-xl bg-muted">
               <p class="text-2xl font-bold">
-                {{ result.funFacts.chouTseEquivalent.toFixed(2) }}
+                {{ formatFixedCount(result.funFacts.chouTseEquivalent) }}
               </p>
               <p class="text-muted-foreground">
                 篇出師表
@@ -93,7 +93,7 @@
           >
             <div class="p-4 rounded-xl bg-muted">
               <p class="text-2xl font-bold">
-                {{ result.funFacts.thesisEquivalent.toFixed(2) }}
+                {{ formatFixedCount(result.funFacts.thesisEquivalent) }}
               </p>
               <p class="text-muted-foreground">
                 篇碩論
@@ -113,7 +113,7 @@
           >
             <div class="p-4 rounded-xl bg-muted">
               <p class="text-2xl font-bold">
-                {{ result.funFacts.booksEquivalent.toFixed(2) }}
+                {{ formatFixedCount(result.funFacts.booksEquivalent) }}
               </p>
               <p class="text-muted-foreground">
                 本哈利波特
@@ -154,4 +154,8 @@ onMounted(() => {
 onUnmounted(() => {
   controls?.stop();
 });
+
+function formatFixedCount(count: number) {
+  return count.toFixed(2);
+}
 </script>

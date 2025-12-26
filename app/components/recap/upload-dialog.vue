@@ -18,7 +18,7 @@
         <component :is="Modal.Description">
           選擇從 Meta 帳號中心匯出的資料夾。<br>
           <a
-            href="https://reurl.cc/KOqXd9"
+            :href="LINKS.TUTORIAL"
             target="_blank"
             rel="noopener noreferrer"
             class="hover:underline text-primary"
@@ -184,6 +184,7 @@ import {
 } from '~/components/ui/drawer';
 import { Button } from '~/components/ui/button';
 import { Alert, AlertTitle, AlertDescription } from '~/components/ui/alert';
+import { LINKS } from '~/constants';
 
 const emit = defineEmits<{
   success: [];

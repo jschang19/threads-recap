@@ -9,7 +9,7 @@ import type {
   ParsedThreadsData,
 } from '~/types/threads';
 import { REQUIRED_FILES } from '~/types/threads';
-import { completeSingleMedia } from '~/utils/completeSingleMedia';
+import { completeSingleMedia } from '~/utils/complete-single-media';
 
 // Extend Window interface for File System Access API
 declare global {
