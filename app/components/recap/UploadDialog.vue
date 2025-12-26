@@ -1,25 +1,36 @@
 <template>
-  <component :is="Modal.Root" v-model:open="isOpen">
+  <component
+    :is="Modal.Root"
+    v-model:open="isOpen"
+  >
     <component
       :is="Modal.Content"
       class="sm:max-w-lg"
       :class="[{ 'px-2 pb-8 *:px-4': !isDesktop }]"
     >
       <component :is="Modal.Header">
-        <component :is="Modal.Title" class="text-xl">
+        <component
+          :is="Modal.Title"
+          class="text-xl"
+        >
           上傳你的匯出資料
         </component>
         <component :is="Modal.Description">
           選擇從 Meta 帳號中心匯出的資料夾。<br>
-          <a href="https://reurl.cc/KOqXd9" target="_blank" rel="noopener noreferrer" class="hover:underline text-primary">
+          <a
+            href="https://reurl.cc/KOqXd9"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hover:underline text-primary"
+          >
             <span class="text-sm font-semibold underline">
               還沒有匯出資料嗎？點我看教學
             </span>
-            </a>
-            <br>資料只會存儲在你的裝置上，不會被傳送到任何伺服器。
+          </a>
+          <br>資料只會存儲在你的裝置上，不會被傳送到任何伺服器。
         </component>
       </component>
-      
+
       <div class="py-4">
         <!-- Drop Zone (desktop only) -->
         <div
@@ -52,7 +63,7 @@
                 class="w-8 h-8 animate-spin"
               />
             </div>
-            
+
             <div class="space-y-2">
               <p class="text-sm font-medium">
                 {{ isDragging ? '放開以上傳資料夾' : '拖放資料夾至此處' }}
@@ -88,7 +99,11 @@
         </div>
 
         <!-- Error Message -->
-        <Alert variant="destructive" class="border-destructive/20" v-if="error && !validationResult">
+        <Alert
+          v-if="error && !validationResult"
+          variant="destructive"
+          class="border-destructive/20"
+        >
           <AlertCircle class="size-5" />
           <AlertTitle>上傳失敗</AlertTitle>
           <AlertDescription>
@@ -103,7 +118,10 @@
           <AlertDescription>
             缺少必要檔案：
             <ul class="list-disc ml-5 my-1 text-xs text-muted-foreground">
-              <li v-for="file in validationResult?.missingFiles" :key="file">
+              <li
+                v-for="file in validationResult?.missingFiles"
+                :key="file"
+              >
                 {{ file }}
               </li>
             </ul>
@@ -112,9 +130,18 @@
         </Alert>
       </div>
 
-      <component :is="Modal.Footer" class="flex flex-col-reverse sm:flex-row sm:justify-end sm:gap-x-2 gap-2 pt-2">
-        <component :is="Modal.Close" as-child>
-          <Button variant="ghost" class="h-12 text-base">
+      <component
+        :is="Modal.Footer"
+        class="flex flex-col-reverse sm:flex-row sm:justify-end sm:gap-x-2 gap-2 pt-2"
+      >
+        <component
+          :is="Modal.Close"
+          as-child
+        >
+          <Button
+            variant="ghost"
+            class="h-12 text-base"
+          >
             取消
           </Button>
         </component>
@@ -190,11 +217,11 @@ function onDragLeave() {
 
 async function onDrop(event: DragEvent) {
   isDragging.value = false;
-  
+
   if (!event.dataTransfer?.items) return;
-  
+
   const result = await handleDroppedFiles(event.dataTransfer.items);
-  
+
   if (result.isValid) {
     emit('success');
     isOpen.value = false;
@@ -203,7 +230,7 @@ async function onDrop(event: DragEvent) {
 
 async function handleSelectFolder() {
   const result = await selectFolder();
-  
+
   if (result.isValid) {
     emit('success');
     isOpen.value = false;
@@ -217,4 +244,3 @@ watch(isOpen, (newVal) => {
   }
 });
 </script>
-

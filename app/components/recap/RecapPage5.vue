@@ -5,40 +5,42 @@
       <Motion
         :initial="{ opacity: 0, y: -30, filter: 'blur(10px)' }"
         :animate="{ opacity: 1, y: 0, filter: 'blur(0px)' }"
-        :transition="{ 
-          duration: 0.7, 
-          delay: 0.1, 
+        :transition="{
+          duration: 0.7,
+          delay: 0.1,
           type: 'spring',
           stiffness: 100,
-          damping: 15
+          damping: 15,
         }"
       >
-        <h2 class="text-3xl font-bold">2025 Threads 總結</h2>
+        <h2 class="text-3xl font-bold">
+          2025 Threads 總結
+        </h2>
       </Motion>
 
       <!-- Summary Card -->
       <Motion
         :initial="{ opacity: 0, y: 40, scale: 0.95, filter: 'blur(12px)' }"
         :animate="{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }"
-        :transition="{ 
-          duration: 0.8, 
-          delay: 0.3, 
+        :transition="{
+          duration: 0.8,
+          delay: 0.3,
           type: 'spring',
           stiffness: 80,
-          damping: 18
+          damping: 18,
         }"
       >
         <div class="flex justify-center items-center">
           <RecapCard
-          :posts-count="result.time.postsIn2025"
-          :total-word-count="result.text.totalWordCount"
-          :likes-count="result.social.likesIn2025"
-          :new-followers-count="result.social.newFollowersIn2025"
-          :peak-month-name="peakMonthName"
-          :most-active-day="result.time.mostActiveDay"
-          :top-mention="topMention"
-          :top-keywords="topKeywordsList"
-        />
+            :posts-count="result.time.postsIn2025"
+            :total-word-count="result.text.totalWordCount"
+            :likes-count="result.social.likesIn2025"
+            :new-followers-count="result.social.newFollowersIn2025"
+            :peak-month-name="peakMonthName"
+            :most-active-day="result.time.mostActiveDay"
+            :top-mention="topMention"
+            :top-keywords="topKeywordsList"
+          />
         </div>
       </Motion>
 
@@ -46,12 +48,12 @@
       <Motion
         :initial="{ opacity: 0, y: 15, filter: 'blur(6px)' }"
         :animate="{ opacity: 1, y: 0, filter: 'blur(0px)' }"
-        :transition="{ 
-          duration: 0.5, 
-          delay: 0.7, 
+        :transition="{
+          duration: 0.5,
+          delay: 0.7,
           type: 'spring',
           stiffness: 100,
-          damping: 18
+          damping: 18,
         }"
       >
         <div>
@@ -69,15 +71,17 @@
         <Motion
           :initial="{ opacity: 0, y: -20, filter: 'blur(8px)' }"
           :animate="{ opacity: 1, y: 0, filter: 'blur(0px)' }"
-          :transition="{ 
-            duration: 0.6, 
-            delay: 1.4, 
+          :transition="{
+            duration: 0.6,
+            delay: 1.4,
             type: 'spring',
             stiffness: 100,
-            damping: 15
+            damping: 15,
           }"
         >
-          <h3 class="text-lg font-semibold">獲得的勳章</h3>
+          <h3 class="text-lg font-semibold">
+            獲得的勳章
+          </h3>
         </Motion>
         <div class="flex flex-wrap justify-center gap-2">
           <Motion
@@ -85,12 +89,12 @@
             :key="badge"
             :initial="{ opacity: 0, scale: 0.8, filter: 'blur(6px)' }"
             :animate="{ opacity: 1, scale: 1, filter: 'blur(0px)' }"
-            :transition="{ 
-              duration: 0.4, 
-              delay: 1.4 + index * 0.1, 
+            :transition="{
+              duration: 0.4,
+              delay: 1.4 + index * 0.1,
               type: 'spring',
               stiffness: 150,
-              damping: 12
+              damping: 12,
             }"
           >
             <span
@@ -106,12 +110,12 @@
       <Motion
         :initial="{ opacity: 0, y: 20, filter: 'blur(6px)' }"
         :animate="{ opacity: 1, y: 0, filter: 'blur(0px)' }"
-        :transition="{ 
-          duration: 0.6, 
-          delay: 1.7, 
+        :transition="{
+          duration: 0.6,
+          delay: 1.7,
           type: 'spring',
           stiffness: 100,
-          damping: 20
+          damping: 20,
         }"
       >
         <div class="pt-4 text-muted-foreground">

@@ -1,7 +1,7 @@
 {
-  "editor.formatOnSave": false,
+  "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.eslint": true
   },
   "scss.lint.unknownAtRules": "ignore",
   "css.customData": [".vscode/tailwind.json"]

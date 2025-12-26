@@ -25,12 +25,12 @@
           <button
             v-for="page in totalRecapPages"
             :key="page"
-            @click="handlePageClick(page)"
             class="w-2.5 h-2.5 rounded-full transition-all duration-300"
             :class="{
               'bg-foreground w-6': page === currentRecapPage,
               'bg-muted-foreground/30 hover:bg-muted-foreground/50': page !== currentRecapPage,
             }"
+            @click="handlePageClick(page)"
           />
         </div>
 
@@ -86,7 +86,7 @@
 
 <script setup lang="ts">
 import { useSwipe, onKeyStroke, useMediaQuery } from '@vueuse/core';
-import { ChevronLeft, ChevronRight, RotateCcw, RefreshCw } from 'lucide-vue-next';
+import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
 import { Button } from '~/components/ui/button';
 import RecapPageWelcome from './RecapPageWelcome.vue';
 import RecapPage1 from './RecapPage1.vue';
@@ -135,7 +135,8 @@ const { direction, lengthX, lengthY } = useSwipe(containerRef, {
     if (direction.value === 'left' && canGoNext.value) {
       showSwipeHint.value = false;
       handleNext();
-    } else if (direction.value === 'right' && canGoPrev.value) {
+    }
+    else if (direction.value === 'right' && canGoPrev.value) {
       showSwipeHint.value = false;
       handlePrev();
     }
@@ -232,4 +233,3 @@ function handlePageClick(page: number) {
   opacity: 0;
 }
 </style>
-

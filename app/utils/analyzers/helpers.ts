@@ -8,8 +8,7 @@ import { YEAR_2025_START, YEAR_2025_END } from '~/types/threads';
 /**
  * Check if a timestamp is in 2025
  */
-export function isIn2025(timestamp: number): boolean 
-{
+export function isIn2025(timestamp: number): boolean {
   return timestamp >= YEAR_2025_START && timestamp <= YEAR_2025_END;
 }
 
@@ -26,7 +25,8 @@ export function countWords(text: string): number {
 
     // Count only word-like segments (not punctuation or whitespace)
     return segments.filter(segment => segment.isWordLike).length;
-  } catch {
+  }
+  catch {
     // Fallback for browsers without Intl.Segmenter support
     const cjkPattern = /[\u4e00-\u9fff\u3400-\u4dbf]/g;
     const cjkChars = text.match(cjkPattern) || [];
@@ -62,7 +62,6 @@ export function extractMentions(text: string): string[] {
     });
 }
 
-
 /**
  * Simple text segmentation using Intl.Segmenter
  * Falls back to regex-based extraction if not supported
@@ -72,7 +71,8 @@ export function simpleSegment(text: string): string[] {
     const segmenter = new Intl.Segmenter('zh-Hant', { granularity: 'word' });
     const segments = Array.from(segmenter.segment(text));
     return segments.filter(s => s.isWordLike).map(s => s.segment);
-  } catch {
+  }
+  catch {
     // Fallback: extract CJK and English words
     const cjkPattern = /[\u4e00-\u9fff\u3400-\u4dbf]+/g;
     const nonCjkPattern = /[a-zA-Z]+/g;
@@ -81,4 +81,3 @@ export function simpleSegment(text: string): string[] {
     return [...cjkMatches, ...nonCjkMatches];
   }
 }
-

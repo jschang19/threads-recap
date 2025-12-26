@@ -7,4 +7,3 @@ export { default as RecapPage2 } from './RecapPage2.vue';
 export { default as RecapPage3 } from './RecapPage3.vue';
 export { default as RecapPage4 } from './RecapPage4.vue';
 export { default as RecapPage5 } from './RecapPage5.vue';
-

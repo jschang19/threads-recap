@@ -1,24 +1,32 @@
-import tailwindcss from '@tailwindcss/vite'
-
+import tailwindcss from '@tailwindcss/vite';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   appId: 'tks-recap',
-  compatibilityDate: '2025-12-25',
-  spaLoadingTemplate: true,
-  css: ['~/assets/css/tailwind.css'],
-  devtools: { enabled: true },
+  modules: ['shadcn-nuxt', 'motion-v/nuxt', '@nuxt/eslint'],
   ssr: false,
+  devtools: { enabled: true },
+  css: ['~/assets/css/tailwind.css'],
+  spaLoadingTemplate: true,
   runtimeConfig: {
     public: {
-      siteHost: process.env.SITE_HOST || "https://recap.threadseeker.com",
+      siteHost: process.env.SITE_HOST || 'https://recap.threadseeker.com',
     },
   },
-  modules: ['shadcn-nuxt', 'motion-v/nuxt'],
+  compatibilityDate: '2025-12-25',
+  nitro: {
+    compressPublicAssets: true,
+  },
   vite: {
     plugins: [tailwindcss()],
   },
-  nitro: {
-    compressPublicAssets: true,
-  }
-})
+  eslint: {
+    config: {
+      stylistic: {
+        quotes: 'single',
+        semi: true,
+        indent: 2,
+      },
+    },
+  },
+});

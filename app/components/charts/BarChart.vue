@@ -98,4 +98,3 @@ const chartOptions = computed(() => ({
   },
 }));
 </script>
-

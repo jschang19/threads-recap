@@ -32,7 +32,7 @@ export function useRecapAnalysis() {
     // Create worker using Vite's worker import
     worker = new Worker(
       new URL('../workers/analyzer.worker.ts', import.meta.url),
-      { type: 'module' }
+      { type: 'module' },
     );
 
     return worker;
@@ -95,10 +95,12 @@ export function useRecapAnalysis() {
               progress: response.progress,
               message: response.message,
             };
-          } else if (response.type === 'result') {
+          }
+          else if (response.type === 'result') {
             handleAnalysisComplete(response.data);
             resolve(response.data);
-          } else if (response.type === 'error') {
+          }
+          else if (response.type === 'error') {
             reject(handleAnalysisError(response.error));
           }
         };
@@ -113,7 +115,8 @@ export function useRecapAnalysis() {
           data,
         };
         w.postMessage(request);
-      } catch (e) {
+      }
+      catch (e) {
         const errorMessage = e instanceof Error ? e.message : '無法啟動分析程序';
         reject(handleAnalysisError(errorMessage));
       }
@@ -139,7 +142,8 @@ export function useRecapAnalysis() {
 
       handleAnalysisComplete(analysisResult);
       return analysisResult;
-    } catch (e) {
+    }
+    catch (e) {
       const errorMessage = e instanceof Error ? e.message : '分析過程發生錯誤';
       throw handleAnalysisError(errorMessage);
     }

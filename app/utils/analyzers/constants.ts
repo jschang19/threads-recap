@@ -40,7 +40,7 @@ export const STOP_WORDS = new Set([
  */
 export const MONTH_NAMES = [
   '一月', '二月', '三月', '四月', '五月', '六月',
-  '七月', '八月', '九月', '十月', '十一月', '十二月'
+  '七月', '八月', '九月', '十月', '十一月', '十二月',
 ];
 
 /**
@@ -53,7 +53,6 @@ export const DAY_NAMES = ['週日', '週一', '週二', '週三', '週四', '週
  */
 export const FUN_FACTS_CONSTANTS = {
   HARRY_POTTER_WORDS: 1084170, // Harry Potter (Philosopher's Stone) word count
-  THESIS_WORDS: 15000,       // Average thesis word count
-  CHOU_TSE_WORDS: 700,        // CHOU TSE word count (出師表)
+  THESIS_WORDS: 15000, // Average thesis word count
+  CHOU_TSE_WORDS: 700, // CHOU TSE word count (出師表)
 };
-

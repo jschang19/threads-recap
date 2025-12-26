@@ -30,7 +30,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
 );
 
 interface Props {
@@ -114,4 +114,3 @@ const chartOptions = computed(() => ({
   },
 }));
 </script>
-

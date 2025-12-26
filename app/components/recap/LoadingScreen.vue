@@ -62,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import { Check, Loader2, Sparkles, FileText, Clock, Users } from 'lucide-vue-next';
+import { Check, Loader2, FileText, Clock, Users } from 'lucide-vue-next';
 import { Progress } from '~/components/ui/progress';
 import type { AnalysisProgress } from '~/types/threads';
 
@@ -108,4 +108,3 @@ function isStageActive(stageId: string): boolean {
   return props.progress.stage === stageId;
 }
 </script>
-

@@ -25,26 +25,12 @@ const isLoading = ref(false);
 const error = ref<string | null>(null);
 
 export function useFileUpload() {
-
   /**
    * Check if File System Access API is supported
    */
   const isFileSystemAccessSupported = computed(() => {
     return typeof window !== 'undefined' && 'showDirectoryPicker' in window;
   });
-
-  /**
-   * Decode UTF-8 encoded content (handles mojibake from Threads export)
-   */
-  function decodeUtf8Content(content: string): string {
-    try {
-      // The JSON files from Threads export have double-encoded UTF-8
-      // First parse as JSON, then decode the string values
-      return content;
-    } catch {
-      return content;
-    }
-  }
 
   /**
    * Fix mojibake in parsed JSON (Threads exports have encoding issues)
@@ -55,7 +41,8 @@ export function useFileUpload() {
         // Try to decode Latin-1 to UTF-8
         const bytes = new Uint8Array(obj.split('').map(c => c.charCodeAt(0)));
         return new TextDecoder('utf-8').decode(bytes);
-      } catch {
+      }
+      catch {
         return obj;
       }
     }
@@ -96,7 +83,7 @@ export function useFileUpload() {
       // Handle both flat structure and nested structure
       const fileName = file.name;
       const relativePath = (file as File & { webkitRelativePath?: string }).webkitRelativePath || '';
-      
+
       // Check if file is in the threads subfolder or root
       if (REQUIRED_FILES.includes(fileName as typeof REQUIRED_FILES[number])) {
         if (relativePath.includes('/threads/') || relativePath.split('/').length <= 2) {
@@ -108,7 +95,8 @@ export function useFileUpload() {
     for (const requiredFile of REQUIRED_FILES) {
       if (fileMap.has(requiredFile)) {
         foundFiles.push(requiredFile);
-      } else {
+      }
+      else {
         missingFiles.push(requiredFile);
       }
     }
@@ -150,7 +138,7 @@ export function useFileUpload() {
 
     async function getFilesRecursively(
       handle: FileSystemDirectoryHandle,
-      path = ''
+      path = '',
     ): Promise<void> {
       // Iterate directory entries using values() - cast needed for older TS types
       const entries = (handle as unknown as { values(): AsyncIterable<FileSystemHandle> }).values();
@@ -164,7 +152,8 @@ export function useFileUpload() {
             writable: false,
           });
           files.push(file);
-        } else if (entry.kind === 'directory') {
+        }
+        else if (entry.kind === 'directory') {
           await getFilesRecursively(entry as FileSystemDirectoryHandle, entryPath);
         }
       }
@@ -190,7 +179,8 @@ export function useFileUpload() {
       input.onchange = () => {
         if (input.files && input.files.length > 0) {
           resolve(Array.from(input.files));
-        } else {
+        }
+        else {
           reject(new Error('未選擇任何檔案'));
         }
       };
@@ -217,14 +207,16 @@ export function useFileUpload() {
       if (isFileSystemAccessSupported.value) {
         try {
           fileList = await selectFolderWithAPI();
-        } catch (e) {
+        }
+        catch (e) {
           // Fallback to input if API fails
           if ((e as Error).name === 'AbortError') {
             throw new Error('已取消選擇');
           }
           fileList = await selectFolderWithInput();
         }
-      } else {
+      }
+      else {
         fileList = await selectFolderWithInput();
       }
 
@@ -236,7 +228,8 @@ export function useFileUpload() {
       }
 
       return result;
-    } catch (e) {
+    }
+    catch (e) {
       const errorMessage = e instanceof Error ? e.message : '發生未知錯誤';
       error.value = errorMessage;
       return {
@@ -245,7 +238,8 @@ export function useFileUpload() {
         foundFiles: [],
         errors: [errorMessage],
       };
-    } finally {
+    }
+    finally {
       isLoading.value = false;
     }
   }
@@ -279,7 +273,8 @@ export function useFileUpload() {
       }
 
       return result;
-    } catch (e) {
+    }
+    catch (e) {
       const errorMessage = e instanceof Error ? e.message : '發生未知錯誤';
       error.value = errorMessage;
       return {
@@ -288,7 +283,8 @@ export function useFileUpload() {
         foundFiles: [],
         errors: [errorMessage],
       };
-    } finally {
+    }
+    finally {
       isLoading.value = false;
     }
   }
@@ -308,7 +304,8 @@ export function useFileUpload() {
         writable: false,
       });
       fileList.push(file);
-    } else if (entry.isDirectory) {
+    }
+    else if (entry.isDirectory) {
       const dirEntry = entry as FileSystemDirectoryEntry;
       const reader = dirEntry.createReader();
       const entries = await new Promise<FileSystemEntry[]>((resolve, reject) => {
@@ -378,4 +375,3 @@ export function useFileUpload() {
     reset,
   };
 }
-

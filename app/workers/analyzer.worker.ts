@@ -54,7 +54,8 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
     const result = runAnalysisPipeline(data, sendProgress);
 
     self.postMessage({ type: 'result', data: result } as WorkerResultMessage);
-  } catch (error) {
+  }
+  catch (error) {
     self.postMessage({
       type: 'error',
       error: error instanceof Error ? error.message : '分析過程發生錯誤',

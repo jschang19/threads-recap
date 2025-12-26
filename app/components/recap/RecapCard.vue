@@ -18,20 +18,36 @@
     <!-- Main Stats -->
     <div class="grid grid-cols-2 gap-6 text-left">
       <div>
-        <p class="text-xs text-muted-foreground">發文數</p>
-        <p class="text-2xl font-medium">{{ postsCount }}</p>
+        <p class="text-xs text-muted-foreground">
+          發文數
+        </p>
+        <p class="text-2xl font-medium">
+          {{ postsCount }}
+        </p>
       </div>
       <div>
-        <p class="text-xs text-muted-foreground">字數</p>
-        <p class="text-2xl font-medium">{{ formattedWordCount }}</p>
+        <p class="text-xs text-muted-foreground">
+          字數
+        </p>
+        <p class="text-2xl font-medium">
+          {{ formattedWordCount }}
+        </p>
       </div>
       <div>
-        <p class="text-xs text-muted-foreground">總按讚數</p>
-        <p class="text-2xl font-medium">{{ likesCount }}</p>
+        <p class="text-xs text-muted-foreground">
+          總按讚數
+        </p>
+        <p class="text-2xl font-medium">
+          {{ likesCount }}
+        </p>
       </div>
       <div>
-        <p class="text-xs text-muted-foreground">新粉絲</p>
-        <p class="text-2xl font-medium">+{{ newFollowersCount }}</p>
+        <p class="text-xs text-muted-foreground">
+          新粉絲
+        </p>
+        <p class="text-2xl font-medium">
+          +{{ newFollowersCount }}
+        </p>
       </div>
     </div>
 
@@ -102,4 +118,3 @@ const displayedKeywords = computed(() => {
   return props.topKeywords?.slice(0, 3) ?? [];
 });
 </script>
-

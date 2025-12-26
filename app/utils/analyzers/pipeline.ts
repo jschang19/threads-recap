@@ -14,7 +14,7 @@ import type {
   KeywordCount,
 } from '~/types/threads';
 import { isIn2025, countWords, countCharacters, extractMentions, simpleSegment } from './helpers';
-import { STOP_WORDS, SAVED_POST_KEYS, DAY_NAMES, FUN_FACTS_CONSTANTS } from './constants';
+import { STOP_WORDS, DAY_NAMES, FUN_FACTS_CONSTANTS } from './constants';
 
 export type AnalysisStage = 'parsing' | 'analyzing-text' | 'analyzing-keywords' | 'analyzing-time' | 'analyzing-social' | 'complete';
 
@@ -28,8 +28,8 @@ export interface ProgressCallback {
 export function analyzeTextCore(posts: ParsedThreadsData['posts']): TextAnalysisResult {
   const posts2025 = posts.filter(post => isIn2025(post.creation_timestamp));
 
-  console.log("posts2025 in pipeline.ts analyzeTextCore", posts2025.length);
-  console.log("posts in pipeline.ts analyzeTextCore", posts.length);
+  console.log('posts2025 in pipeline.ts analyzeTextCore', posts2025.length);
+  console.log('posts in pipeline.ts analyzeTextCore', posts.length);
 
   let totalWordCount = 0;
   let totalCharCount = 0;
@@ -78,10 +78,10 @@ export function analyzeKeywordsCore(posts: ParsedThreadsData['posts']): KeywordC
     for (const word of words) {
       const cleanWord = word.trim().toLowerCase();
       if (
-        cleanWord.length >= 2 &&
-        !STOP_WORDS.has(cleanWord) &&
-        !/^\d+$/.test(cleanWord) &&
-        !cleanWord.startsWith('@')
+        cleanWord.length >= 2
+        && !STOP_WORDS.has(cleanWord)
+        && !/^\d+$/.test(cleanWord)
+        && !cleanWord.startsWith('@')
       ) {
         keywordCounts.set(cleanWord, (keywordCounts.get(cleanWord) || 0) + 1);
       }
@@ -172,7 +172,7 @@ export function analyzeSocialCore(
   followers: ParsedThreadsData['followers'],
   following: ParsedThreadsData['following'],
   likes: ParsedThreadsData['likes'],
-  savedPosts: ParsedThreadsData['savedPosts']
+  savedPosts: ParsedThreadsData['savedPosts'],
 ): SocialAnalysisResult {
   const getFollowTimestamp = (item: { string_list_data?: { timestamp: number }[] }) =>
     item.string_list_data?.[0]?.timestamp || 0;
@@ -190,8 +190,8 @@ export function analyzeSocialCore(
   }, 0);
 
   const totalSaved = savedPosts.length;
-  const savedIn2025 = savedPosts.filter(post => {
-    const savedTimeData = post.string_map_data?.["儲存時間"];
+  const savedIn2025 = savedPosts.filter((post) => {
+    const savedTimeData = post.string_map_data?.['儲存時間'];
     return savedTimeData && isIn2025(savedTimeData.timestamp);
   }).length;
 
@@ -235,7 +235,7 @@ export function analyzeSocialCore(
  */
 export function calculateFunFactsCore(
   totalWordCount: number,
-  posts: { creation_timestamp: number }[]
+  posts: { creation_timestamp: number }[],
 ): FunFacts {
   const { HARRY_POTTER_WORDS, THESIS_WORDS, CHOU_TSE_WORDS } = FUN_FACTS_CONSTANTS;
 
@@ -298,13 +298,10 @@ export function calculateFunFactsCore(
  */
 export function runAnalysisPipeline(
   data: ParsedThreadsData,
-  onProgress?: ProgressCallback
+  onProgress?: ProgressCallback,
 ): RecapAnalysisResult {
   const report = onProgress || (() => {});
 
-  // (dev) print all the data whose creation_timestamp is undefined
-  const noCreationTimestamp = data.posts.filter(post => post.creation_timestamp === undefined);
-  const hasCreationTimestamp = data.posts.filter(post => post.creation_timestamp !== undefined);
   // Step 1: Text analysis
   report('analyzing-text', 20, '正在分析文字內容...');
   const textResult = analyzeTextCore(data.posts);
@@ -324,7 +321,7 @@ export function runAnalysisPipeline(
     data.followers,
     data.following,
     data.likes,
-    data.savedPosts
+    data.savedPosts,
   );
 
   // Step 5: Fun facts
@@ -341,4 +338,3 @@ export function runAnalysisPipeline(
     funFacts,
   };
 }
-

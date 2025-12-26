@@ -62,7 +62,7 @@ function renderHeatmap() {
   for (let month = 0; month < 12; month++) {
     for (let day = 0; day < 7; day++) {
       const count = dataMap.get(`${month}-${day}`) || 0;
-      
+
       svg
         .append('rect')
         .attr('x', month * cellWidth)
@@ -75,14 +75,14 @@ function renderHeatmap() {
         .attr('stroke', '#fff')
         .attr('stroke-width', 1)
         .style('cursor', 'pointer')
-        .on('mouseover', function(event) {
+        .on('mouseover', function (event) {
           d3.select(this).attr('stroke', '#000').attr('stroke-width', 2);
-          
+
           // Get mouse position relative to container
           const containerRect = container.getBoundingClientRect();
           const mouseX = event.clientX - containerRect.left;
           const mouseY = event.clientY - containerRect.top;
-          
+
           // Show tooltip
           d3.select(container)
             .append('div')
@@ -99,7 +99,7 @@ function renderHeatmap() {
             .style('top', `${mouseY - 45}px`)
             .html(`${MONTHS[month]} ${DAYS[day]}<br/><strong>${count} 則貼文</strong>`);
         })
-        .on('mouseout', function() {
+        .on('mouseout', function () {
           d3.select(this).attr('stroke', '#fff').attr('stroke-width', 1);
           d3.select(container).selectAll('.heatmap-tooltip').remove();
         });
@@ -140,16 +140,16 @@ watch(() => props.data, renderHeatmap, { deep: true });
 
 onMounted(() => {
   renderHeatmap();
-  
+
   // Handle resize
   const resizeObserver = new ResizeObserver(() => {
     renderHeatmap();
   });
-  
+
   if (containerRef.value) {
     resizeObserver.observe(containerRef.value);
   }
-  
+
   onUnmounted(() => {
     resizeObserver.disconnect();
   });
@@ -162,4 +162,3 @@ onMounted(() => {
   white-space: nowrap;
 }
 </style>
-
