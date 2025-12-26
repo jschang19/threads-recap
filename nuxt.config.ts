@@ -26,7 +26,7 @@ export default defineNuxtConfig({
           id: process.env.NUXT_PUBLIC_SCRIPTS_CLARITY_ID || '',
         },
       },
-      siteHost: process.env.SITE_HOST || 'https://recap.threadseeker.com',
+      siteHost: process.env.NUXT_PUBLIC_SITE_HOST || 'http://localhost:3000',
     },
   },
   scripts:{
