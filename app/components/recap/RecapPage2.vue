@@ -1,6 +1,5 @@
 <template>
   <div class="flex flex-col items-center justify-center px-4 pb-8">
-    <BlurBackground />
     <div class="text-center space-y-8 max-w-lg mx-auto w-full flex-1">
       <!-- Title -->
       <div class="space-y-2 pt-24 md:pt-6">
