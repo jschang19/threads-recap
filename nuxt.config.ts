@@ -9,6 +9,11 @@ export default defineNuxtConfig({
   css: ['~/assets/css/tailwind.css'],
   devtools: { enabled: true },
   ssr: false,
+  runtimeConfig: {
+    public: {
+      siteHost: process.env.SITE_HOST,
+    },
+  },
   modules: ['shadcn-nuxt', 'motion-v/nuxt'],
   vite: {
     plugins: [tailwindcss()],
