@@ -7,18 +7,19 @@
     />
 
     <!-- Loading Stage -->
-    <LoadingScreen
-      v-else-if="appStage === 'loading'"
+    <LazyRecapLoadingScreen
+      v-if="appStage === 'loading'"
       :progress="progress"
     />
 
     <!-- Recap Stage -->
-    <RecapContainer v-else-if="appStage === 'recap'" />
+    <LazyRecapContainer
+      v-if="appStage === 'recap'"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { LoadingScreen, RecapContainer, RecapLanding } from '~/components/recap';
 import type { ParsedThreadsData } from '~/types/threads';
 import { toast } from 'vue-sonner';
 

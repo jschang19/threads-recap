@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
+import RecapCard from '~/components/recap/recap-card.vue';
 import { MotionBox } from '~/components/ui/motion-box';
-import { RecapCard } from '~/components/recap';
 import { MOCK_DEMO_DATA } from '~/constants';
 </script>

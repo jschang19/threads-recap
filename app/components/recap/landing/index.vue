@@ -16,7 +16,8 @@
     </section>
 
     <!-- Upload Dialog -->
-    <UploadDialog
+    <LazyRecapUploadDialog
+      v-if="showUploadDialog"
       v-model:open="showUploadDialog"
       @success="handleUploadSuccess"
     />
@@ -24,7 +25,6 @@
 </template>
 
 <script setup lang="ts">
-import { UploadDialog } from '~/components/recap';
 import LandingHero from './components/landing-hero.vue';
 import LandingDemoCard from './components/landing-demo-card.vue';
 import LandingHowItWork from './components/landing-how-it-work.vue';

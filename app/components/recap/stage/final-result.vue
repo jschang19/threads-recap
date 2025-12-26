@@ -103,9 +103,9 @@
 </template>
 
 <script setup lang="ts">
+import RecapCard from '~/components/recap/recap-card.vue';
 import { MotionBox } from '~/components/ui/motion-box';
 import type { RecapAnalysisResult } from '~/types/threads';
-import { RecapCard } from '~/components/recap';
 import { MONTH_NAMES } from '~/constants';
 
 interface Props {
