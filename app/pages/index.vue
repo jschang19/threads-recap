@@ -9,7 +9,7 @@
       <section class="flex-1 flex flex-col items-center justify-center px-4 py-12 text-center">
         <div class="max-w-2xl mx-auto space-y-8 h-full flex flex-col justify-center">
 
-        <div class="flex flex-col justify-center items-center pt-36 pb-12">
+        <div class="flex flex-col justify-center items-center pt-24 pb-4">
           <!-- Title -->
           <div class="space-y-4">
             <Motion
