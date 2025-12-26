@@ -1,39 +1,9 @@
-<div class="loader"></div>
-<style>
-  .loader {
-    display: block;
-    position: fixed;
-    z-index: 1031;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 18px;
-    height: 18px;
-    box-sizing: border-box;
-    border: solid 2px transparent;
-    border-top-color: #000;
-    border-left-color: #000;
-    border-bottom-color: #efefef;
-    border-right-color: #efefef;
-    border-radius: 50%;
-    -webkit-animation: loader 400ms linear infinite;
-    animation: loader 400ms linear infinite;
-  }
-
-  \@-webkit-keyframes loader {
-    0% {
-      -webkit-transform: translate(-50%, -50%) rotate(0deg);
-    }
-    100% {
-      -webkit-transform: translate(-50%, -50%) rotate(360deg);
-    }
-  }
-  \@keyframes loader {
-    0% {
-      transform: translate(-50%, -50%) rotate(0deg);
-    }
-    100% {
-      transform: translate(-50%, -50%) rotate(360deg);
-    }
-  }
-</style>
+<div
+  style="position: fixed;top: 0;right: 0;left: 0;height: 100vh;height: 100svh;z-index: 999;background-color: var(--background-primary);transition: opacity 200ms ease-in, transform 200ms ease-in">
+  <svg id="tks-logo" width="81" height="93" viewBox="0 0 81 93" xmlns="http://www.w3.org/2000/svg"
+    style="position: absolute;left: calc(50vw - 15px);top: calc(48vh - 46px);transform: scale(1);transition: opacity 200ms ease-in, transform 200ms ease-in">
+    <path fill-rule="evenodd" clip-rule="evenodd"
+      d="M30.5931 1.60214C25.8201 3.95514 21.3541 9.45714 21.3541 12.9841C21.3541 15.4181 20.9391 15.9491 19.0361 15.9491C14.4141 15.9491 6.71911 18.9581 3.94911 21.8491C0.21211 25.7511 -0.560891 32.1681 2.18111 36.5291C4.96211 40.9511 10.0191 42.9361 20.8271 43.8481C30.9231 44.7001 33.3541 45.8061 33.3541 49.5481C33.3541 55.3811 20.2531 57.5441 11.6721 53.1291C9.37211 51.9461 7.20811 50.5211 6.86311 49.9631C5.83911 48.3071 1.49711 48.8101 0.51511 50.6991C-0.88089 53.3851 0.51111 55.8081 5.29711 59.0221C11.1621 62.9611 16.5251 64.2661 24.5231 63.7001C35.9491 62.8911 42.9901 56.6421 42.0581 48.1371C41.1671 40.0061 35.3391 36.2571 22.0521 35.2681C11.5151 34.4851 9.35411 33.6781 9.35411 30.5301C9.35411 26.8021 12.8361 24.9481 19.8271 24.9541C25.7601 24.9591 26.7371 25.3331 33.5881 30.2221C36.4461 32.2611 38.9921 31.6641 39.9211 28.7361C40.7881 26.0071 37.7311 22.0381 32.5191 19.1261C28.7731 17.0331 28.4721 16.5881 29.4751 14.6261C33.1911 7.35914 42.2471 6.97414 45.8441 13.9291C47.0541 16.2701 47.3541 21.1411 47.3541 38.4651C47.3541 51.4531 47.7671 60.8531 48.3891 62.0151C49.6031 64.2831 53.5911 64.5731 55.2981 62.5171C56.1631 61.4751 56.4001 54.6011 56.1701 37.2671C55.8621 14.0151 55.7951 13.3421 53.3541 8.94914C49.0171 1.14314 38.4471 -2.26886 30.5931 1.60214Z"
+      fill="black"></path>
+  </svg>
+</div>
