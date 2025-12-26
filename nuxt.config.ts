@@ -11,7 +11,7 @@ export default defineNuxtConfig({
   ssr: false,
   runtimeConfig: {
     public: {
-      siteHost: process.env.SITE_HOST,
+      siteHost: process.env.SITE_HOST || "https://recap.threadseeker.com",
     },
   },
   modules: ['shadcn-nuxt', 'motion-v/nuxt'],
