@@ -14,7 +14,7 @@ import type {
   KeywordCount,
 } from '~/types/threads';
 import { isIn2025, countWords, countCharacters, extractMentions, simpleSegment } from './helpers';
-import { STOP_WORDS, DAY_NAMES, FUN_FACTS_CONSTANTS } from './constants';
+import { STOP_WORDS, DAY_NAMES, FUN_FACTS_CONSTANTS } from '~/constants';
 
 export type AnalysisStage = 'parsing' | 'analyzing-text' | 'analyzing-keywords' | 'analyzing-time' | 'analyzing-social' | 'complete';
 

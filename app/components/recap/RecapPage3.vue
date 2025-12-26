@@ -67,15 +67,13 @@
 <script setup lang="ts">
 import type { RecapAnalysisResult } from '~/types/threads';
 import { BarChart, Heatmap } from '~/components/charts';
+import { MONTH_LABELS, MONTH_NAMES } from '~/constants';
 
 interface Props {
   result: RecapAnalysisResult;
 }
 
 const props = defineProps<Props>();
-
-const MONTH_LABELS = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
-const MONTH_NAMES = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
 
 const monthLabels = MONTH_LABELS;
 

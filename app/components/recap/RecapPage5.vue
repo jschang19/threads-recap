@@ -135,14 +135,13 @@
 import { Motion } from 'motion-v';
 import type { RecapAnalysisResult } from '~/types/threads';
 import { RecapCard } from '~/components/recap';
+import { MONTH_NAMES } from '~/constants';
 
 interface Props {
   result: RecapAnalysisResult;
 }
 
 const props = defineProps<Props>();
-
-const MONTH_NAMES = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
 
 const peakMonthName = computed(() => {
   return MONTH_NAMES[props.result.time.mostActiveMonth - 1] || '';
