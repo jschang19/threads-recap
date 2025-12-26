@@ -184,6 +184,7 @@ function handleToFirstPage() {
 function handleRestart() {
   reset();
   setStage('landing');
+  scrollToTop();
 }
 
 function handlePageClick(page: number) {

@@ -1,6 +1,6 @@
 <template>
-  <div class="min-h-[70vh] flex flex-col items-center justify-center px-4 py-8">
-    <div class="text-center space-y-5 max-w-md mx-auto w-full">
+  <div class="min-h-[68vh] flex flex-col items-center justify-center px-4 pt-8">
+    <div class="text-center space-y-4 max-w-md mx-auto w-full">
       <!-- Title -->
       <Motion
         :initial="{ opacity: 0, y: -30, filter: 'blur(10px)' }"
@@ -28,7 +28,8 @@
           damping: 18
         }"
       >
-        <RecapCard
+        <div class="flex justify-center items-center">
+          <RecapCard
           :posts-count="result.time.postsIn2025"
           :total-word-count="result.text.totalWordCount"
           :likes-count="result.social.likesIn2025"
@@ -38,6 +39,7 @@
           :top-mention="topMention"
           :top-keywords="topKeywordsList"
         />
+        </div>
       </Motion>
 
       <!-- Share CTA -->
@@ -53,15 +55,15 @@
         }"
       >
         <div>
-          <p class="text-xs text-muted-foreground mb-3">
+          <p class="text-xs text-muted-foreground">
             截圖分享你的年度回顧吧！
           </p>
         </div>
       </Motion>
 
-      <!-- Holiday Badges -->
+      <!-- Holiday Badges (Temporary disabled before better UI) -->
       <div
-        v-if="result.funFacts.holidayBadges.length > 0"
+        v-if="false"
         class="space-y-3 pt-4"
       >
         <Motion
@@ -106,7 +108,7 @@
         :animate="{ opacity: 1, y: 0, filter: 'blur(0px)' }"
         :transition="{ 
           duration: 0.6, 
-          delay: 2.4, 
+          delay: 1.7, 
           type: 'spring',
           stiffness: 100,
           damping: 20

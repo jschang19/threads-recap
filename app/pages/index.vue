@@ -9,65 +9,101 @@
       <section class="flex-1 flex flex-col items-center justify-center px-4 py-12 text-center">
         <div class="max-w-2xl mx-auto space-y-8 h-full flex flex-col justify-center">
 
-        <div class="flex flex-col justify-center items-center space-y-8 h-[calc(50dvh)] md:h-[calc(42dvh)]">
-          <div class="space-y-4">
-            <!-- Badge -->
-            <div class="inline-flex items-center gap-2 px-4 py-2 bg-foreground/5 rounded-md text-sm">
-              <Flag class="size-4" />
-              <span>非 Threads 官方網站</span>
-            </div>
-          </div>
+        <div class="flex flex-col justify-center items-center pt-36 pb-12">
           <!-- Title -->
           <div class="space-y-4">
-            <h1 class="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight">
-              你的 Threads 年度回顧
-            </h1>
-            <p class="text-xl sm:text-2xl text-muted-foreground">
-              深入回顧 2025 年的活網黑歷史
-            </p>
+            <Motion
+              :initial="{ opacity: 0, y: 18 }"
+              :animate="{ opacity: 1, y: 0 }"
+              :transition="{ duration: 0.6, ease: 'easeOut' }"
+            >
+              <h1 class="text-3xl sm:text-4xl md:text-6xl font-black tracking-tight leading-tight">
+                2025<br />Threads 年度回顧
+              </h1>
+            </Motion>
+            <Motion
+              :initial="{ opacity: 0, y: 18 }"
+              :animate="{ opacity: 1, y: 0 }"
+              :transition="{ duration: 0.6, ease: 'easeOut', delay: 0.08 }"
+            >
+              <p class="text-base sm:text-lg">
+                這一年的活網黑歷史，等你來重溫
+              </p>
+            </Motion>
           </div>
 
           <!-- CTA Button -->
           <div class="pt-3 space-y-2 flex flex-col items-center justify-center">
-            <Button
-              size="lg"
-              class="text-base px-8 py-6 rounded-md h-12 w-full max-w-sm mx-auto"
-              @click="showUploadDialog = true"
+            <Motion
+              :initial="{ opacity: 0, y: 14 }"
+              :animate="{ opacity: 1, y: 0 }"
+              :transition="{ duration: 0.5, ease: 'easeOut', delay: 0.14 }"
+              class="w-full"
             >
-              開始回顧
-            </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              as="a"
-              class="px-4 py-2 rounded-md h-12 text-base w-full max-w-sm mx-auto shadow-none"
-              href="https://reurl.cc/KOqXd9"
-              target="_blank"
-              rel="noopener noreferrer"
+              <Button
+                size="lg"
+                class="text-base px-8 py-6 rounded-md h-12 w-full max-w-sm mx-auto"
+                @click="showUploadDialog = true"
+              >
+                開始回顧
+              </Button>
+            </Motion>
+            <Motion
+              :initial="{ opacity: 0, y: 14 }"
+              :animate="{ opacity: 1, y: 0 }"
+              :transition="{ duration: 0.5, ease: 'easeOut', delay: 0.2 }"
+              class="w-full"
             >
-              看教學
-              <ExternalLink class="w-4 h-4" />
-            </Button>
-            <span class="text-xs text-muted-foreground">只在手機或電腦執行分析，紀錄不會上傳伺服器 | <a href="https://github.com/jschang19/threads-recap" target="_blank" rel="noopener noreferrer" class="hover:underline">如何確認？</a></span>
+              <Button
+                size="sm"
+                variant="outline"
+                as="a"
+                class="px-4 py-2 rounded-md h-12 text-base w-full max-w-sm mx-auto shadow-none"
+                href="https://reurl.cc/KOqXd9"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                看教學
+              </Button>
+            </Motion>
+            <Motion
+              :initial="{ opacity: 0, y: 10 }"
+              :animate="{ opacity: 1, y: 0 }"
+              :transition="{ duration: 0.45, ease: 'easeOut', delay: 0.26 }"
+            >
+              <span class="text-xs text-muted-foreground">只在手機或電腦執行分析，紀錄不會上傳伺服器 | <a href="https://github.com/jschang19/threads-recap" target="_blank" rel="noopener noreferrer" class="hover:underline">如何確認？</a></span>
+            </Motion>
           </div>
         </div>
 
 
           <!-- Demo Card -->
           <div class="pt-12 w-full max-w-sm mx-auto">
-            <h2 class="text-2xl font-bold text-center mb-4">像 Spotify 一樣的年度回顧</h2>
-            <div class="opacity-90 hover:opacity-100 transition-opacity">
-              <RecapCard
-                :posts-count="mockDemoData.postsCount"
-                :total-word-count="mockDemoData.totalWordCount"
-                :likes-count="mockDemoData.likesCount"
-                :new-followers-count="mockDemoData.newFollowersCount"
-                :peak-month-name="mockDemoData.peakMonthName"
-                :most-active-day="mockDemoData.mostActiveDay"
-                :top-mention="mockDemoData.topMention"
-                :top-keywords="mockDemoData.topKeywords"
-              />
-            </div>
+            <Motion
+              :initial="{ opacity: 0, y: 14 }"
+              :animate="{ opacity: 1, y: 0 }"
+              :transition="{ duration: 0.55, ease: 'easeOut', delay: 0.18 }"
+            >
+              <h2 class="text-2xl font-bold text-center mb-4">像 Spotify 一樣的年度回顧</h2>
+            </Motion>
+            <Motion
+              :initial="{ opacity: 0, y: 10, scale: 0.98 }"
+              :animate="{ opacity: 1, y: 0, scale: 1 }"
+              :transition="{ duration: 0.65, ease: 'easeOut', delay: 0.24 }"
+            >
+              <div class="flex justify-center items-center">
+                <RecapCard
+                  :posts-count="mockDemoData.postsCount"
+                  :total-word-count="mockDemoData.totalWordCount"
+                  :likes-count="mockDemoData.likesCount"
+                  :new-followers-count="mockDemoData.newFollowersCount"
+                  :peak-month-name="mockDemoData.peakMonthName"
+                  :most-active-day="mockDemoData.mostActiveDay"
+                  :top-mention="mockDemoData.topMention"
+                  :top-keywords="mockDemoData.topKeywords"
+                />
+              </div>
+            </Motion>
           </div>
         </div>
       </section>
@@ -128,6 +164,7 @@
 
 <script setup lang="ts">
 import { Flag, ExternalLink } from 'lucide-vue-next';
+import { Motion } from 'motion-v';
 import { Button } from '~/components/ui/button';
 import { UploadDialog, LoadingScreen, RecapContainer, RecapCard } from '~/components/recap';
 import type { ParsedThreadsData } from '~/types/threads';
