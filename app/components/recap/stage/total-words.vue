@@ -3,35 +3,22 @@
     <div class="text-center space-y-8 max-w-lg mx-auto w-full flex-1">
       <!-- Title -->
       <div class="space-y-2 pt-24 md:pt-6">
-        <Motion
-          :initial="{ opacity: 0, y: -30, filter: 'blur(10px)' }"
-          :animate="{ opacity: 1, y: 0, filter: 'none' }"
-          :transition="{
-            duration: 0.7,
-            delay: 0.1,
-            type: 'spring',
-            stiffness: 100,
-            damping: 15,
-          }"
+        <MotionBox
+          preset="fadeDown"
+          :delay="0.1"
         >
           <h2 class="text-3xl font-bold leading-13">
             <span class="text-lg font-normal text-muted-foreground">如果在 Threads 打一個字拿一塊</span><br>你今年可以拿到
           </h2>
-        </Motion>
+        </MotionBox>
       </div>
 
       <!-- Word Count -->
       <div class="space-y-4">
-        <Motion
-          :initial="{ opacity: 0, scale: 0.5, filter: 'blur(20px)' }"
-          :animate="{ opacity: 1, scale: 1, filter: 'none' }"
-          :transition="{
-            duration: 0.7,
-            delay: 1.3,
-            type: 'spring',
-            stiffness: 80,
-            damping: 18,
-          }"
+        <MotionBox
+          preset="fadeScale"
+          :delay="1.3"
+          :stiffness="80"
         >
           <div class="relative inline-block">
             <span class="text-7xl sm:text-8xl font-black tracking-tighter">
@@ -39,37 +26,23 @@
               <span class="text-xl text-muted-foreground font-normal ml-3">元</span>
             </span>
           </div>
-        </Motion>
+        </MotionBox>
       </div>
 
       <!-- Fun Equivalents -->
       <div class="py-10 space-y-4">
-        <Motion
-          :initial="{ opacity: 0, y: 20, filter: 'blur(8px)' }"
-          :animate="{ opacity: 1, y: 0, filter: 'none' }"
-          :transition="{
-            duration: 0.6,
-            delay: 2.3,
-            type: 'spring',
-            stiffness: 100,
-            damping: 18,
-          }"
+        <MotionBox
+          preset="fadeUp"
+          :delay="2.3"
         >
           <h3 class="text-lg font-semibold">
             你今年打的字數等於
           </h3>
-        </Motion>
+        </MotionBox>
         <div class="grid grid-cols-3 gap-2 md:gap-3">
-          <Motion
-            :initial="{ opacity: 0, y: 30, scale: 0.9, filter: 'blur(8px)' }"
-            :animate="{ opacity: 1, y: 0, scale: 1, filter: 'none' }"
-            :transition="{
-              duration: 0.5,
-              delay: 2.4,
-              type: 'spring',
-              stiffness: 120,
-              damping: 15,
-            }"
+          <MotionBox
+            preset="card"
+            :delay="2.4"
           >
             <div class="p-4 rounded-xl bg-muted">
               <p class="text-2xl font-bold">
@@ -79,17 +52,10 @@
                 篇出師表
               </p>
             </div>
-          </Motion>
-          <Motion
-            :initial="{ opacity: 0, y: 30, scale: 0.9, filter: 'blur(8px)' }"
-            :animate="{ opacity: 1, y: 0, scale: 1, filter: 'none' }"
-            :transition="{
-              duration: 0.5,
-              delay: 2.5,
-              type: 'spring',
-              stiffness: 120,
-              damping: 15,
-            }"
+          </MotionBox>
+          <MotionBox
+            preset="card"
+            :delay="2.5"
           >
             <div class="p-4 rounded-xl bg-muted">
               <p class="text-2xl font-bold">
@@ -99,17 +65,10 @@
                 篇碩論
               </p>
             </div>
-          </Motion>
-          <Motion
-            :initial="{ opacity: 0, y: 30, scale: 0.9, filter: 'blur(8px)' }"
-            :animate="{ opacity: 1, y: 0, scale: 1, filter: 'none' }"
-            :transition="{
-              duration: 0.5,
-              delay: 2.6,
-              type: 'spring',
-              stiffness: 120,
-              damping: 15,
-            }"
+          </MotionBox>
+          <MotionBox
+            preset="card"
+            :delay="2.6"
           >
             <div class="p-4 rounded-xl bg-muted">
               <p class="text-2xl font-bold">
@@ -119,7 +78,7 @@
                 本哈利波特
               </p>
             </div>
-          </Motion>
+          </MotionBox>
         </div>
       </div>
     </div>
@@ -128,7 +87,8 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted } from 'vue';
-import { Motion, animate, useMotionValue, useTransform, RowValue } from 'motion-v';
+import { animate, useMotionValue, useTransform, RowValue } from 'motion-v';
+import { MotionBox } from '~/components/ui/motion-box';
 import type { RecapAnalysisResult } from '~/types/threads';
 
 interface Props {

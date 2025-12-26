@@ -1,19 +1,20 @@
 <template>
   <div class="pt-12 w-full max-w-sm mx-auto">
-    <Motion
-      :initial="{ opacity: 0, y: 14 }"
-      :animate="{ opacity: 1, y: 0 }"
-      :transition="{ duration: 0.55, ease: 'easeOut', delay: 0.18 }"
+    <MotionBox
+      preset="slideUp"
+      :delay="0.18"
+      :duration="0.55"
     >
       <h2 class="text-2xl font-bold text-center mb-4">
         像 Spotify 一樣的年度回顧
       </h2>
-    </Motion>
+    </MotionBox>
 
-    <Motion
-      :initial="{ opacity: 0, y: 10, scale: 0.98 }"
-      :animate="{ opacity: 1, y: 0, scale: 1 }"
-      :transition="{ duration: 0.65, ease: 'easeOut', delay: 0.24 }"
+    <MotionBox
+      preset="subtle"
+      :delay="0.24"
+      :duration="0.65"
+      :scale="0.98"
     >
       <div class="flex justify-center items-center">
         <RecapCard
@@ -27,14 +28,12 @@
           :top-keywords="MOCK_DEMO_DATA.topKeywords"
         />
       </div>
-    </Motion>
+    </MotionBox>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Motion } from 'motion-v';
+import { MotionBox } from '~/components/ui/motion-box';
 import { RecapCard } from '~/components/recap';
 import { MOCK_DEMO_DATA } from '~/constants';
 </script>
-
-

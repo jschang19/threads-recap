@@ -6,43 +6,28 @@
         v-if="result.text.topMentions.length > 0"
         class="space-y-4"
       >
-        <Motion
-          :initial="{ opacity: 0, y: -30, filter: 'blur(10px)' }"
-          :animate="{ opacity: 1, y: 0, filter: 'blur(0px)' }"
-          :transition="{ 
-            duration: 0.7, 
-            delay: 0.1, 
-            type: 'spring',
-            stiffness: 100,
-            damping: 15
-          }"
+        <MotionBox
+          preset="fadeDown"
+          :delay="0.1"
         >
           <h3 class="text-2xl font-semibold">你最常 @ 這些人</h3>
-        </Motion>
+        </MotionBox>
         <div class="flex flex-wrap justify-center gap-3">
-          <Motion
+          <MotionBox
             v-if="result.text.topMentions.length === 0"
-            :initial="{ opacity: 0 }"
-            :animate="{ opacity: 1 }"
-            :transition="{ duration: 0.5, delay: 0.3 }"
+            preset="fade"
+            :delay="0.3"
           >
             <div class="text-muted-foreground text-base py-2 w-full">
               Oops... 你今年沒有 @ 過任何人
             </div>
-          </Motion>
-          <Motion
+          </MotionBox>
+          <MotionBox
             v-for="(mention, index) in result.text.topMentions"
             v-else
             :key="mention.username"
-            :initial="{ opacity: 0, y: 20, scale: 0.9, filter: 'blur(8px)' }"
-            :animate="{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }"
-            :transition="{ 
-              duration: 0.5, 
-              delay: 0.3 + index * 0.15, 
-              type: 'spring',
-              stiffness: 120,
-              damping: 15
-            }"
+            preset="card"
+            :delay="0.3 + index * 0.15"
           >
             <a
               :href="`https://threads.com/${mention.username}`"
@@ -53,7 +38,7 @@
               <span class="font-medium">@{{ mention.username }}</span>
               <span class="text-sm text-muted-foreground">({{ mention.count }}次)</span>
             </a>
-          </Motion>
+          </MotionBox>
         </div>
       </div>
 
@@ -62,52 +47,43 @@
         v-if="result.text.topKeywords.length > 0"
         class="pt-8 space-y-4"
       >
-        <Motion
-          :initial="{ opacity: 0, y: -20, filter: 'blur(10px)' }"
-          :animate="{ opacity: 1, y: 0, filter: 'blur(0px)' }"
-          :transition="{ 
-            duration: 0.7, 
-            delay: 0.8, 
-            type: 'spring',
-            stiffness: 100,
-            damping: 15
-          }"
+        <MotionBox
+          preset="fadeDown"
+          :delay="0.8"
+          :slide-y="-20"
         >
           <h3 class="text-2xl font-semibold">你最常用這些字</h3>
-        </Motion>
-        <Motion
+        </MotionBox>
+        <MotionBox
           v-if="result.text.topKeywords.length === 0"
-          :initial="{ opacity: 0 }"
-          :animate="{ opacity: 1 }"
-          :transition="{ duration: 0.5, delay: 1.0 }"
+          preset="fade"
+          :delay="1.0"
         >
           <div class="text-muted-foreground text-base py-2 w-full">
             Oops... 找不出你最常提到的關鍵字
           </div>
-        </Motion>
+        </MotionBox>
         <div
           v-else
           class="flex flex-wrap justify-center gap-2"
         >
-          <Motion
+          <MotionBox
             v-for="(k, index) in result.text.topKeywords"
             :key="k.keyword"
-            :initial="{ opacity: 0, scale: 0.8, filter: 'blur(6px)' }"
-            :animate="{ opacity: 1, scale: 1, filter: 'blur(0px)' }"
-            :transition="{ 
-              duration: 0.4, 
-              delay: 1.0 + index * 0.08, 
-              type: 'spring',
-              stiffness: 150,
-              damping: 12
-            }"
+            preset="fadeScale"
+            :delay="1.0 + index * 0.08"
+            :duration="0.4"
+            :scale="0.8"
+            :blur="6"
+            :stiffness="150"
+            :damping="12"
           >
             <span
               class="px-3 py-1 bg-muted rounded-full text-sm hover:bg-muted-foreground/10 transition-colors"
             >
               {{ k.keyword }}
             </span>
-          </Motion>
+          </MotionBox>
         </div>
       </div>
     </div>
@@ -115,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-import { Motion } from 'motion-v';
+import { MotionBox } from '~/components/ui/motion-box';
 import type { RecapAnalysisResult } from '~/types/threads';
 
 interface Props {

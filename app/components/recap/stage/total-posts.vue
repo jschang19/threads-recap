@@ -3,82 +3,62 @@
     <div class="text-center space-y-8 max-w-lg mx-auto">
       <!-- Main Stats -->
       <div class="space-y-3">
-        <Motion
-          :initial="{ opacity: 0, y: -30, filter: 'blur(10px)' }"
-          :animate="{ opacity: 1, y: 0, filter: 'blur(0px)' }"
-          :transition="{
-            duration: 0.7,
-            delay: 0.1,
-            type: 'spring',
-            stiffness: 100,
-            damping: 15,
-          }"
+        <MotionBox
+          preset="fadeDown"
+          :delay="0.1"
         >
           <p class="text-3xl font-bold">
             過去一年，你總共發了
           </p>
-        </Motion>
+        </MotionBox>
 
-        <Motion
-          :initial="{ opacity: 0, scale: 0.5, filter: 'blur(20px)' }"
-          :animate="{ opacity: 1, scale: 1, filter: 'blur(0px)' }"
-          :transition="{
-            duration: 0.8,
-            delay: 0.3,
-            type: 'spring',
-            stiffness: 80,
-            damping: 18,
-          }"
+        <MotionBox
+          preset="fadeScale"
+          :delay="0.3"
+          :duration="0.8"
+          :stiffness="80"
+          :damping="18"
         >
           <div class="relative">
             <span class="text-8xl sm:text-9xl font-black tracking-tighter">
               <RowValue :value="roundedCount" />
             </span>
           </div>
-        </Motion>
+        </MotionBox>
 
-        <Motion
-          :initial="{ opacity: 0, y: 30, filter: 'blur(8px)' }"
-          :animate="{ opacity: 1, y: 0, filter: 'blur(0px)' }"
-          :transition="{
-            duration: 0.6,
-            delay: 0.6,
-            type: 'spring',
-            stiffness: 100,
-            damping: 18,
-          }"
+        <MotionBox
+          preset="fadeUp"
+          :delay="0.6"
+          :slide-y="30"
         >
           <p class="text-xl text-muted-foreground">
             則貼文跟留言
           </p>
-        </Motion>
+        </MotionBox>
       </div>
 
       <!-- Most Active Period -->
-      <Motion
-        :initial="{ opacity: 0, y: 20, filter: 'blur(6px)' }"
-        :animate="{ opacity: 1, y: 0, filter: 'blur(0px)' }"
-        :transition="{
-          duration: 0.5,
-          delay: 1.9,
-          type: 'spring',
-          stiffness: 100,
-          damping: 20,
-        }"
+      <MotionBox
+        preset="fadeUp"
+        :delay="1.9"
+        :duration="0.5"
+        :blur="6"
+        :damping="20"
       >
         <div class="pt-8">
           <p class="text-lg text-muted-foreground">
             {{ displayMessage }}
           </p>
         </div>
-      </Motion>
+      </MotionBox>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, computed } from 'vue';
-import { Motion, animate, useMotionValue, useTransform, RowValue } from 'motion-v';
+import { animate, useMotionValue, useTransform, RowValue } from 'motion-v';
+import { MotionBox } from '~/components/ui/motion-box';
 import type { RecapAnalysisResult } from '~/types/threads';
 
 interface Props {

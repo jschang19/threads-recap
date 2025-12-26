@@ -2,32 +2,28 @@
   <div class="flex flex-col justify-center items-center pt-24 pb-4">
     <!-- Title -->
     <div class="space-y-4">
-      <Motion
-        :initial="{ opacity: 0, y: 18 }"
-        :animate="{ opacity: 1, y: 0 }"
-        :transition="{ duration: 0.6, ease: 'easeOut' }"
-      >
+      <MotionBox preset="slideUp">
         <h1 class="text-3xl sm:text-4xl md:text-6xl font-black tracking-tight leading-tight">
           2025<br>Threads 年度回顧
         </h1>
-      </Motion>
-      <Motion
-        :initial="{ opacity: 0, y: 18 }"
-        :animate="{ opacity: 1, y: 0 }"
-        :transition="{ duration: 0.6, ease: 'easeOut', delay: 0.08 }"
+      </MotionBox>
+      <MotionBox
+        preset="slideUp"
+        :delay="0.08"
       >
         <p class="text-base sm:text-lg">
           這一年的活網黑歷史，等你來重溫
         </p>
-      </Motion>
+      </MotionBox>
     </div>
 
     <!-- CTA Button -->
     <div class="pt-3 space-y-2 flex flex-col items-center justify-center">
-      <Motion
-        :initial="{ opacity: 0, y: 14 }"
-        :animate="{ opacity: 1, y: 0 }"
-        :transition="{ duration: 0.5, ease: 'easeOut', delay: 0.14 }"
+      <MotionBox
+        preset="slideUp"
+        :delay="0.14"
+        :duration="0.5"
+        :slide-y="14"
         class="w-full"
       >
         <Button
@@ -37,12 +33,13 @@
         >
           開始回顧
         </Button>
-      </Motion>
+      </MotionBox>
 
-      <Motion
-        :initial="{ opacity: 0, y: 14 }"
-        :animate="{ opacity: 1, y: 0 }"
-        :transition="{ duration: 0.5, ease: 'easeOut', delay: 0.2 }"
+      <MotionBox
+        preset="slideUp"
+        :delay="0.2"
+        :duration="0.5"
+        :slide-y="14"
         class="w-full"
       >
         <Button
@@ -56,12 +53,11 @@
         >
           看教學
         </Button>
-      </Motion>
+      </MotionBox>
 
-      <Motion
-        :initial="{ opacity: 0, y: 10 }"
-        :animate="{ opacity: 1, y: 0 }"
-        :transition="{ duration: 0.45, ease: 'easeOut', delay: 0.26 }"
+      <MotionBox
+        preset="subtle"
+        :delay="0.26"
       >
         <span class="text-xs text-muted-foreground">
           只在手機或電腦執行分析，紀錄不會上傳伺服器 |
@@ -72,13 +68,13 @@
             class="hover:underline"
           >如何確認？</a>
         </span>
-      </Motion>
+      </MotionBox>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Motion } from 'motion-v';
+import { MotionBox } from '~/components/ui/motion-box';
 import { Button } from '~/components/ui/button';
 import { LINKS } from '~/constants';
 
@@ -97,5 +93,3 @@ const emit = defineEmits<{
   (e: 'open-upload'): void;
 }>();
 </script>
-
-
