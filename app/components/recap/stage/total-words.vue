@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-[75vh] flex flex-col items-center justify-center px-4 pb-8">
+  <div class="min-h-[70vh] flex flex-col items-center justify-center px-4 pb-8">
     <div class="text-center space-y-8 max-w-lg mx-auto w-full flex-1">
       <!-- Title -->
       <div class="space-y-2 pt-22 md:pt-6">
@@ -30,7 +30,7 @@
       </div>
 
       <!-- Fun Equivalents -->
-      <div class="py-10 space-y-4">
+      <div class="pt-4 space-y-4">
         <MotionBox
           preset="fadeUp"
           :delay="2.3"

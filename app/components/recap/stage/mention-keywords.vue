@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-[75vh] flex flex-col items-center justify-center px-4 pt-24 pb-8">
+  <div class="min-h-[70vh] flex flex-col items-center justify-center px-4 pt-16 pb-8">
     <div class="text-center space-y-8 max-w-lg mx-auto w-full">
       <!-- Top Mentions -->
       <div
@@ -10,7 +10,9 @@
           preset="fadeDown"
           :delay="0.1"
         >
-          <h3 class="text-2xl font-semibold">你最常 @ 這些人</h3>
+          <h3 class="text-2xl font-semibold">
+            你最常 @ 這些人
+          </h3>
         </MotionBox>
         <div class="flex flex-wrap justify-center gap-3">
           <MotionBox
@@ -45,14 +47,16 @@
       <!-- Top Keywords -->
       <div
         v-if="result.text.topKeywords.length > 0"
-        class="pt-8 space-y-4"
+        class="pt-4 space-y-4"
       >
         <MotionBox
           preset="fadeDown"
           :delay="0.8"
           :slide-y="-20"
         >
-          <h3 class="text-2xl font-semibold">你最常用這些字</h3>
+          <h3 class="text-2xl font-semibold">
+            你最常用這些字
+          </h3>
         </MotionBox>
         <MotionBox
           v-if="result.text.topKeywords.length === 0"

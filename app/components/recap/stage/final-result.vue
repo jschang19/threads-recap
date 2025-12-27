@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-[75vh] flex flex-col items-center justify-center px-4 pt-12">
+  <div class="min-h-[70vh] flex flex-col items-center justify-center px-4 pt-6">
     <div class="text-center space-y-4 max-w-md mx-auto w-full">
       <!-- Title -->
       <MotionBox
@@ -112,7 +112,8 @@
             <RotateCcw class="w-4 h-4" />
             回到開頭
           </Button>
-      </div></MotionBox>
+        </div>
+      </MotionBox>
     </div>
   </div>
 </template>
@@ -126,6 +127,7 @@ import type { RecapAnalysisResult } from '~/types/threads';
 import { MONTH_NAMES } from '~/constants';
 import { useRecapStore } from '~/composables/use-recap-store';
 import { scrollToTop } from '~/utils/scroll-to-top';
+
 const { goToPage } = useRecapStore();
 
 interface Props {

@@ -17,9 +17,6 @@ import {
   type UploadError,
 } from '~/utils/validate-file-limits';
 
-// Re-export types for external use
-export type { UploadError, UploadErrorType } from '~/utils/validate-file-limits';
-
 // Extend Window interface for File System Access API
 declare global {
   interface Window {
