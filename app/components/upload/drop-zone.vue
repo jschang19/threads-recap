@@ -1,6 +1,7 @@
 <template>
   <!-- Drop Zone (desktop only) -->
   <div
+    v-if="isDesktop"
     class="relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-200"
     :class="{
       'border-primary bg-primary/5': isDragging,
@@ -69,6 +70,7 @@
 import { FolderOpen, Loader2 } from 'lucide-vue-next';
 
 defineProps<{
+  isDesktop: boolean;
   isDragging: boolean;
   isLoading: boolean;
   hasError: boolean;

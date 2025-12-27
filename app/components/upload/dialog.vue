@@ -33,8 +33,8 @@
       </component>
 
       <div class="py-4">
-        <LazyUploadDropZone
-          v-if="isDesktop"
+        <UploadDropZone
+          :is-desktop="isDesktop"
           :is-dragging="isDragging"
           :is-loading="isLoading"
           :has-error="!!error"
