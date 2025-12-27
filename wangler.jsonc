@@ -1,0 +1,8 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "threads-recap-7908798",
+  "vars": {
+    "NUXT_PUBLIC_SITE_HOST": "http://localhost:3000",
+    "NUXT_PUBLIC_SCRIPTS_CLARITY_ID": "urls3y4osz"
+  }
+}
