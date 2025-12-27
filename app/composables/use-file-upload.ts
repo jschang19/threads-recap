@@ -10,6 +10,15 @@ import type {
 } from '~/types/threads';
 import { REQUIRED_FILES } from '~/types/threads';
 import { completeSingleMedia } from '~/utils/complete-single-media';
+import {
+  validateFileLimits,
+  isFileCountExceeded,
+  createFileCountError,
+  type UploadError,
+} from '~/utils/validate-file-limits';
+
+// Re-export types for external use
+export type { UploadError, UploadErrorType } from '~/utils/validate-file-limits';
 
 // Extend Window interface for File System Access API
 declare global {
@@ -23,6 +32,9 @@ const files = ref<UploadedFiles>({});
 const validationResult = ref<FileValidationResult | null>(null);
 const isLoading = ref(false);
 const error = ref<string | null>(null);
+const uploadError = ref<UploadError | null>(null);
+// Track if operation was cancelled to ignore pending results
+let operationCancelled = false;
 
 export function useFileUpload() {
   /**
@@ -199,7 +211,9 @@ export function useFileUpload() {
   async function selectFolder(): Promise<FileValidationResult> {
     isLoading.value = true;
     error.value = null;
+    uploadError.value = null;
     validationResult.value = null;
+    operationCancelled = false;
 
     try {
       let fileList: File[];
@@ -220,6 +234,29 @@ export function useFileUpload() {
         fileList = await selectFolderWithInput();
       }
 
+      // Check if operation was cancelled while waiting
+      if (operationCancelled) {
+        return {
+          isValid: false,
+          missingFiles: [],
+          foundFiles: [],
+          errors: [],
+        };
+      }
+
+      // Check file limits before processing
+      const limitError = validateFileLimits(fileList);
+      if (limitError) {
+        uploadError.value = limitError;
+        error.value = limitError.message;
+        return {
+          isValid: false,
+          missingFiles: [],
+          foundFiles: [],
+          errors: [limitError.message],
+        };
+      }
+
       const result = validateFiles(fileList);
       validationResult.value = result;
 
@@ -230,6 +267,16 @@ export function useFileUpload() {
       return result;
     }
     catch (e) {
+      // Don't set error if operation was cancelled
+      if (operationCancelled) {
+        return {
+          isValid: false,
+          missingFiles: [],
+          foundFiles: [],
+          errors: [],
+        };
+      }
+
       const errorMessage = e instanceof Error ? e.message : '發生未知錯誤';
       error.value = errorMessage;
       return {
@@ -240,7 +287,9 @@ export function useFileUpload() {
       };
     }
     finally {
-      isLoading.value = false;
+      if (!operationCancelled) {
+        isLoading.value = false;
+      }
     }
   }
 
@@ -250,7 +299,9 @@ export function useFileUpload() {
   async function handleDroppedFiles(items: DataTransferItemList): Promise<FileValidationResult> {
     isLoading.value = true;
     error.value = null;
+    uploadError.value = null;
     validationResult.value = null;
+    operationCancelled = false;
 
     try {
       const fileList: File[] = [];
@@ -263,6 +314,52 @@ export function useFileUpload() {
             await processEntry(entry, fileList);
           }
         }
+
+        // Check if operation was cancelled during processing
+        if (operationCancelled) {
+          return {
+            isValid: false,
+            missingFiles: [],
+            foundFiles: [],
+            errors: [],
+          };
+        }
+
+        // Early check during processing to prevent freezing
+        if (isFileCountExceeded(fileList.length)) {
+          const limitError = createFileCountError(fileList.length);
+          uploadError.value = limitError;
+          error.value = limitError.message;
+          return {
+            isValid: false,
+            missingFiles: [],
+            foundFiles: [],
+            errors: [limitError.message],
+          };
+        }
+      }
+
+      // Check if operation was cancelled while waiting
+      if (operationCancelled) {
+        return {
+          isValid: false,
+          missingFiles: [],
+          foundFiles: [],
+          errors: [],
+        };
+      }
+
+      // Check file limits before processing
+      const limitError = validateFileLimits(fileList);
+      if (limitError) {
+        uploadError.value = limitError;
+        error.value = limitError.message;
+        return {
+          isValid: false,
+          missingFiles: [],
+          foundFiles: [],
+          errors: [limitError.message],
+        };
       }
 
       const result = validateFiles(fileList);
@@ -275,6 +372,16 @@ export function useFileUpload() {
       return result;
     }
     catch (e) {
+      // Don't set error if operation was cancelled
+      if (operationCancelled) {
+        return {
+          isValid: false,
+          missingFiles: [],
+          foundFiles: [],
+          errors: [],
+        };
+      }
+
       const errorMessage = e instanceof Error ? e.message : '發生未知錯誤';
       error.value = errorMessage;
       return {
@@ -285,7 +392,9 @@ export function useFileUpload() {
       };
     }
     finally {
-      isLoading.value = false;
+      if (!operationCancelled) {
+        isLoading.value = false;
+      }
     }
   }
 
@@ -354,13 +463,15 @@ export function useFileUpload() {
   }
 
   /**
-   * Reset all state
+   * Reset all state and cancel any ongoing operations
    */
   function reset() {
+    operationCancelled = true;
     files.value = {};
     validationResult.value = null;
     isLoading.value = false;
     error.value = null;
+    uploadError.value = null;
   }
 
   return {
@@ -368,6 +479,7 @@ export function useFileUpload() {
     validationResult: readonly(validationResult),
     isLoading: readonly(isLoading),
     error: readonly(error),
+    uploadError: readonly(uploadError),
     isFileSystemAccessSupported,
     selectFolder,
     handleDroppedFiles,

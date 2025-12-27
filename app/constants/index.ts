@@ -3,9 +3,11 @@
  * These are used by both main thread analyzers and web worker
  */
 
-
 export const YEAR_2025_START = new Date('2025-01-01T00:00:00Z').getTime() / 1000;
 export const YEAR_2025_END = new Date('2025-12-31T23:59:59Z').getTime() / 1000;
+
+export const FILE_SIZE_LIMIT = 1024 * 1024 * 25; // 25MB
+export const MAX_FILE_COUNT = 300; // Maximum number of files allowed in uploaded folder
 
 // Unicode keys for saved_threads.json (Traditional Chinese)
 export const SAVED_POST_KEYS = {
@@ -50,7 +52,6 @@ export const MONTH_NAMES = [
   '七月', '八月', '九月', '十月', '十一月', '十二月',
 ];
 
-
 export const MONTH_LABELS = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
 
 /**
@@ -66,7 +67,6 @@ export const FUN_FACTS_CONSTANTS = {
   THESIS_WORDS: 15000, // Average thesis word count
   CHOU_TSE_WORDS: 700, // CHOU TSE word count (出師表)
 };
-
 
 export const LINKS = {
   TUTORIAL: 'https://reurl.cc/KOqXd9',

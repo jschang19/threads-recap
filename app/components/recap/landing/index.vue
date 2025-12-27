@@ -16,10 +16,11 @@
     </section>
 
     <!-- Upload Dialog -->
-    <LazyRecapUploadDialog
+    <LazyUploadDialog
       v-if="showUploadDialog"
       v-model:open="showUploadDialog"
       @success="handleUploadSuccess"
+      @close="handleUploadClose"
     />
   </div>
 </template>
@@ -29,6 +30,9 @@ import LandingHero from './components/landing-hero.vue';
 import LandingDemoCard from './components/landing-demo-card.vue';
 import LandingHowItWork from './components/landing-how-it-work.vue';
 import LandingEndTutorial from './components/landing-end-tutorial.vue';
+import { useFileUpload } from '~/composables/use-file-upload';
+
+const { reset } = useFileUpload();
 
 const emit = defineEmits<{
   (e: 'upload-success'): void;
@@ -59,5 +63,8 @@ function handleUploadSuccess() {
   showUploadDialog.value = false;
   emit('upload-success');
 }
-</script>
 
+function handleUploadClose() {
+  reset();
+}
+</script>
