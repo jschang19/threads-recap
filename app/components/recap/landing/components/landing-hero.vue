@@ -3,7 +3,7 @@
     <!-- Title -->
     <div class="space-y-4">
       <MotionBox preset="slideUp">
-        <h1 class="text-3xl sm:text-4xl md:text-6xl font-black tracking-tight leading-tight">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight">
           2025<br>Threads 年度回顧
         </h1>
       </MotionBox>
@@ -18,7 +18,7 @@
     </div>
 
     <!-- CTA Button -->
-    <div class="pt-3 space-y-2 flex flex-col items-center justify-center">
+    <div class="pt-6 space-y-2 flex flex-col items-center justify-center">
       <MotionBox
         preset="slideUp"
         :delay="0.14"
