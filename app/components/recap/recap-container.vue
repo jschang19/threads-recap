@@ -24,8 +24,6 @@
       :show-key-hint="showKeyHint"
       :show-swipe-hint="showSwipeHint"
       @page-click="handlePageClick"
-      @to-first-page="handleToFirstPage"
-      @restart="handleRestart"
     />
   </div>
 </template>
@@ -42,6 +40,7 @@ import {
   RecapEngagements,
   RecapFinalResult,
 } from './stage';
+import { scrollToTop } from '~/utils/scroll-to-top';
 
 const {
   currentRecapPage,
@@ -52,8 +51,6 @@ const {
   nextPage,
   prevPage,
   goToPage,
-  reset,
-  setStage,
 } = useRecapStore();
 
 const pages = [RecapWelcomePage, RecapTotalPosts, RecapTotalWords, RecapMentionKeywords, RecapStatGraphs, RecapEngagements, RecapFinalResult];
@@ -105,13 +102,6 @@ onKeyStroke('ArrowLeft', () => {
   }
 });
 
-function scrollToTop() {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth',
-  });
-}
-
 function handleNext() {
   scrollToTop();
   transitionName.value = 'slide-left';
@@ -122,17 +112,6 @@ function handlePrev() {
   scrollToTop();
   transitionName.value = 'slide-right';
   prevPage();
-}
-
-function handleToFirstPage() {
-  scrollToTop();
-  goToPage(1);
-}
-
-function handleRestart() {
-  reset();
-  setStage('landing');
-  scrollToTop();
 }
 
 function handlePageClick(page: number) {

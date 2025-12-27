@@ -40,34 +40,12 @@
           <ChevronRight class="w-4 h-4" />
         </div>
       </Transition>
-
-      <!-- Restart Button (on last page) -->
-      <div
-        v-if="currentRecapPage === totalRecapPages"
-        class="pt-3 space-y-2"
-      >
-        <Button
-          variant="default"
-          class="w-full h-12"
-          @click="emit('to-first-page')"
-        >
-          重新開始
-        </Button>
-        <Button
-          variant="ghost"
-          class="w-full h-12"
-          @click="emit('restart')"
-        >
-          建立新的回顧
-        </Button>
-      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
-import { Button } from '~/components/ui/button';
 
 defineProps<{
   currentRecapPage: number;
@@ -79,7 +57,6 @@ defineProps<{
 
 const emit = defineEmits<{
   (e: 'page-click', page: number): void;
-  (e: 'to-first-page' | 'restart'): void;
 }>();
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-[60vh] flex flex-col items-center justify-center px-4 py-8">
+  <div class="min-h-[75vh] flex flex-col items-center justify-center px-4 py-8">
     <div class="text-center space-y-6 max-w-2xl mx-auto w-full">
       <!-- Title -->
       <div class="space-y-2">

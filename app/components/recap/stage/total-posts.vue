@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-[70vh] flex flex-col items-center justify-center px-4 py-8">
+  <div class="min-h-[75vh] flex flex-col items-center justify-center px-4 py-8">
     <div class="text-center space-y-8 max-w-lg mx-auto">
       <!-- Main Stats -->
       <div class="space-y-3">

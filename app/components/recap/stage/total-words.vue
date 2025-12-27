@@ -1,8 +1,8 @@
 <template>
-  <div class="flex flex-col items-center justify-center px-4 pb-8">
+  <div class="min-h-[75vh] flex flex-col items-center justify-center px-4 pb-8">
     <div class="text-center space-y-8 max-w-lg mx-auto w-full flex-1">
       <!-- Title -->
-      <div class="space-y-2 pt-24 md:pt-6">
+      <div class="space-y-2 pt-22 md:pt-6">
         <MotionBox
           preset="fadeDown"
           :delay="0.1"

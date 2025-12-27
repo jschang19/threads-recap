@@ -1,12 +1,12 @@
 <template>
-  <div class="min-h-[68vh] flex flex-col items-center justify-center px-4 pt-8">
+  <div class="min-h-[75vh] flex flex-col items-center justify-center px-4 pt-12">
     <div class="text-center space-y-4 max-w-md mx-auto w-full">
       <!-- Title -->
       <MotionBox
         preset="fadeDown"
         :delay="0.1"
       >
-        <h2 class="text-3xl font-bold">
+        <h2 class="text-2xl font-bold">
           2025 Threads 總結
         </h2>
       </MotionBox>
@@ -89,24 +89,44 @@
         :delay="1.7"
         :damping="20"
       >
-        <div class="pt-4 text-muted-foreground">
-          <p class="text-sm">
-            感謝一起回顧這一年在 Threads 上的各種回憶
+        <div class="gap-3 flex flex-col items-center justify-center">
+          <p class="text-xs text-muted-foreground">
+            想看其他人的結果嗎？
           </p>
-          <p class="text-sm mt-2 text-muted-foreground">
-            2025 一路走好，2026 請多指教！
-          </p>
+          <Button
+            as="a"
+            href="https://threadseeker.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="h-9 px-8 rounded-full shadow-none"
+          >
+            試試 Threadseeker
+          </Button>
         </div>
-      </MotionBox>
+        <div class="pt-6">
+          <Button
+            variant="link"
+            class="h-7 px-8 rounded-full shadow-none text-xs"
+            @click="handleToFirstPage"
+          >
+            <RotateCcw class="w-4 h-4" />
+            回到開頭
+          </Button>
+      </div></MotionBox>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import RecapCard from '~/components/recap/recap-card.vue';
+import { RotateCcw } from 'lucide-vue-next';
+import { Button } from '~/components/ui/button';
 import { MotionBox } from '~/components/ui/motion-box';
 import type { RecapAnalysisResult } from '~/types/threads';
 import { MONTH_NAMES } from '~/constants';
+import { useRecapStore } from '~/composables/use-recap-store';
+import { scrollToTop } from '~/utils/scroll-to-top';
+const { goToPage } = useRecapStore();
 
 interface Props {
   result: RecapAnalysisResult;
@@ -125,4 +145,9 @@ const topMention = computed(() => {
 const topKeywordsList = computed(() => {
   return props.result.text.topKeywords.map(k => k.keyword);
 });
+
+function handleToFirstPage() {
+  scrollToTop();
+  goToPage(1);
+}
 </script>
