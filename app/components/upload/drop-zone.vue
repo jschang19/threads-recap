@@ -1,7 +1,6 @@
 <template>
   <!-- Drop Zone (desktop only) -->
   <div
-    v-if="isDesktop"
     class="relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-200"
     :class="{
       'border-primary bg-primary/5': isDragging,
@@ -41,36 +40,12 @@
       </div>
     </div>
   </div>
-
-  <!-- Mobile upload icon -->
-  <div
-    v-else
-    class="flex flex-col items-center gap-3 py-4"
-  >
-    <div
-      class="w-14 h-14 rounded-full flex items-center justify-center transition-colors"
-      :class="{
-        'bg-muted text-muted-foreground': !hasError,
-        'bg-destructive/10 text-destructive': hasError,
-      }"
-    >
-      <FolderOpen
-        v-if="!isLoading"
-        class="w-7 h-7"
-      />
-      <Loader2
-        v-else
-        class="w-7 h-7 animate-spin"
-      />
-    </div>
-  </div>
 </template>
 
 <script setup lang="ts">
 import { FolderOpen, Loader2 } from 'lucide-vue-next';
 
 defineProps<{
-  isDesktop: boolean;
   isDragging: boolean;
   isLoading: boolean;
   hasError: boolean;

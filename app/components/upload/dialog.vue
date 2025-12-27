@@ -9,15 +9,45 @@
       class="sm:max-w-lg"
       :class="[{ 'px-2 pb-8 *:px-4': !isDesktop }]"
     >
-      <component :is="Modal.Header">
+      <component
+        :is="Modal.Header"
+      >
         <component
           :is="Modal.Title"
           class="text-xl"
         >
           上傳你的匯出資料
         </component>
-        <component :is="Modal.Description">
-          選擇從 Meta 帳號中心匯出的資料夾。<br>
+        <component
+          :is="Modal.Description"
+          class="leading-relaxed space-y-2"
+        >
+          <p class="text-sm">
+            請依下路徑選擇資料夾：
+          </p>
+          <div class="flex items-center gap-3 py-2.5 px-3 bg-primary/5 rounded-lg w-full pb-4">
+            <template
+              v-for="(item, idx) in [
+                { name: '匯出的資料夾' },
+                { name: 'your ig activity' },
+                { name: 'threads' },
+              ]"
+              :key="item.name"
+            >
+              <div class="flex items-center">
+                <span
+                  class="font-mono text-[13px]"
+                  :class="{ 'font-bold text-primary': idx === 2 }"
+                >
+                  {{ item.name }}
+                </span>
+              </div>
+              <span
+                v-if="idx < 2"
+                class="text-muted-foreground"
+              >/</span>
+            </template>
+          </div>
           <a
             :href="LINKS.TUTORIAL"
             target="_blank"
@@ -28,28 +58,27 @@
               還沒有匯出資料嗎？點我看教學
             </span>
           </a>
-          <br>資料只會存儲在你的裝置上，不會被傳送到任何伺服器。
+          <br>資料不會被傳送到任何伺服器。
         </component>
       </component>
 
-      <div class="py-4">
-        <UploadDropZone
-          :is-desktop="isDesktop"
-          :is-dragging="isDragging"
-          :is-loading="isLoading"
-          :has-error="!!error"
-          @dragover="onDragOver"
-          @dragleave="onDragLeave"
-          @drop="onDrop"
-        />
+      <LazyUploadDropZone
+        v-if="isDesktop"
+        class="my-4"
+        :is-dragging="isDragging"
+        :is-loading="isLoading"
+        :has-error="!!error"
+        @dragover="onDragOver"
+        @dragleave="onDragLeave"
+        @drop="onDrop"
+      />
 
-        <LazyUploadErrorAlert
-          v-if="hasError"
-          :upload-error="uploadError"
-          :error="error"
-          :validation-result="validationResult"
-        />
-      </div>
+      <LazyUploadErrorAlert
+        v-if="hasError"
+        :upload-error="uploadError"
+        :error="error"
+        :validation-result="validationResult"
+      />
 
       <component
         :is="Modal.Footer"

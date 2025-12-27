@@ -1,59 +1,61 @@
 <template>
-  <!-- File Limit Error (too many files or too large) -->
-  <Alert
-    v-if="uploadError"
-    variant="destructive"
-    class="border-destructive/20"
-  >
-    <AlertCircle class="size-5" />
-    <AlertTitle>
-      {{ uploadError.type === 'too_many_files' ? '檔案數量超過上限' : '檔案大小超過上限' }}
-    </AlertTitle>
-    <AlertDescription>
-      <p>{{ uploadError.message }}</p>
-      <p class="mt-2 text-xs text-muted-foreground">
-        <template v-if="uploadError.type === 'too_many_files'">
-          請選擇 {{ DISPLAY_FOLDER_NAME }} 資料夾，而非整個匯出資料夾。
-          上限：{{ MAX_FILE_COUNT }} 個檔案
-        </template>
-        <template v-else>
-          請選擇 {{ DISPLAY_FOLDER_NAME }} 資料夾，而非整個匯出資料夾。
-          上限：{{ Math.round(FILE_SIZE_LIMIT / (1024 * 1024)) }} MB
-        </template>
-      </p>
-    </AlertDescription>
-  </Alert>
+  <div class="px-4 pb-2">
+    <!-- File Limit Error (too many files or too large) -->
+    <Alert
+      v-if="uploadError"
+      variant="destructive"
+      class="border-destructive/20"
+    >
+      <AlertCircle class="size-5" />
+      <AlertTitle>
+        {{ uploadError.type === 'too_many_files' ? '檔案數量超過上限' : '檔案大小超過上限' }}
+      </AlertTitle>
+      <AlertDescription>
+        <p>{{ uploadError.message }}</p>
+        <p class="mt-2 text-xs text-muted-foreground">
+          <template v-if="uploadError.type === 'too_many_files'">
+            請選擇 {{ DISPLAY_FOLDER_NAME }} 資料夾，而非整個匯出資料夾。
+            上限：{{ MAX_FILE_COUNT }} 個檔案
+          </template>
+          <template v-else>
+            請選擇 {{ DISPLAY_FOLDER_NAME }} 資料夾，而非整個匯出資料夾。
+            上限：{{ Math.round(FILE_SIZE_LIMIT / (1024 * 1024)) }} MB
+          </template>
+        </p>
+      </AlertDescription>
+    </Alert>
 
-  <!-- General Error Message -->
-  <Alert
-    v-else-if="error && !validationResult"
-    variant="destructive"
-    class="border-destructive/20"
-  >
-    <AlertCircle class="size-5" />
-    <AlertTitle>上傳失敗</AlertTitle>
-    <AlertDescription>
-      {{ error || '上傳失敗，請重新上傳' }}
-    </AlertDescription>
-  </Alert>
+    <!-- General Error Message -->
+    <Alert
+      v-else-if="error && !validationResult"
+      variant="destructive"
+      class="border-destructive/20"
+    >
+      <AlertCircle class="size-5" />
+      <AlertTitle>上傳失敗</AlertTitle>
+      <AlertDescription>
+        {{ error || '上傳失敗，請重新上傳' }}
+      </AlertDescription>
+    </Alert>
 
-  <!-- Validation Result -->
-  <Alert v-if="validationResult && !validationResult.isValid && !uploadError">
-    <AlertCircle class="size-5" />
-    <AlertTitle>檔案驗證失敗</AlertTitle>
-    <AlertDescription>
-      缺少必要檔案：
-      <ul class="list-disc ml-5 my-1 text-xs text-muted-foreground">
-        <li
-          v-for="file in validationResult.missingFiles"
-          :key="file"
-        >
-          {{ file }}
-        </li>
-      </ul>
-      <span>請確認你採用 JSON 匯出格式，或是選擇解壓縮後的資料夾</span>
-    </AlertDescription>
-  </Alert>
+    <!-- Validation Result -->
+    <Alert v-if="validationResult && !validationResult.isValid && !uploadError">
+      <AlertCircle class="size-5" />
+      <AlertTitle>檔案驗證失敗</AlertTitle>
+      <AlertDescription>
+        缺少必要檔案：
+        <ul class="list-disc ml-5 my-1 text-xs text-muted-foreground">
+          <li
+            v-for="file in validationResult.missingFiles"
+            :key="file"
+          >
+            {{ file }}
+          </li>
+        </ul>
+        <span>請確認你採用 JSON 匯出格式，或是選擇解壓縮後的資料夾</span>
+      </AlertDescription>
+    </Alert>
+  </div>
 </template>
 
 <script setup lang="ts">
