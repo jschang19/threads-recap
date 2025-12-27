@@ -4,7 +4,7 @@
 
 ![Threadseeker Recap Banner](https://recap.threadseeker.app/images/banner.webp)
 
-**「這一年的活網點擊，等你來重溫。」**
+**「這一年的活網點滴，等你來重溫。」**
 
 [立即開始回顧](https://recap.threadseeker.app) | [Threads 匯出教學](https://reurl.cc/KOqXd9)
 
@@ -16,7 +16,7 @@
 
 **Threadseeker Recap** 是一個專為 Threads 使用者打造的年度回顧工具。只需匯出你的 Meta Threads 資料後並上傳，我們就能為你生成一份精美、充滿細節的年度回顧報告，讓你重溫過去一年的社群軌跡。
 
-## 核心特色
+## 網站功能
 
 - **🎨 沈浸式回顧**：將枯燥的程式碼數據，變成沈浸式的回顧動態，以及簡單清楚的統計圖。
 - **📊 深度分析**：
@@ -68,7 +68,7 @@ If you are a developer, The following is some technical details about this proje
 
 ---
 
-## Development and deployment guide
+## How to setup?
 
 ### Environment requirements
 - **Node.js**: v22.x 或以上
