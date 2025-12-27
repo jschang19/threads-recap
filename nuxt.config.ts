@@ -46,10 +46,10 @@ export default defineNuxtConfig({
     public: {
       scripts:{
         clarity: {
-          id: process.env.NUXT_PUBLIC_SCRIPTS_CLARITY_ID || '',
+          id: process.env.NUXT_PUBLIC_SCRIPTS_CLARITY_ID || 'urls3y4osz',
         },
       },
-      siteHost: process.env.NUXT_PUBLIC_SITE_HOST || 'http://localhost:3000',
+      siteHost: process.env.NUXT_PUBLIC_SITE_HOST || 'https://recap.threadseeker.app',
     },
   },
   scripts:{
