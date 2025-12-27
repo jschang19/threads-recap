@@ -191,6 +191,8 @@ export interface FileValidationResult {
   missingFiles: string[];
   foundFiles: string[];
   errors: string[];
+  uploadedFolderName?: string;
+  isValidFolderName?: boolean;
 }
 
 export interface UploadedFiles {

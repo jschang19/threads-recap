@@ -23,31 +23,8 @@
           class="leading-relaxed space-y-2"
         >
           <p class="text-sm">
-            請依下路徑選擇資料夾：
+            請先確保已解壓縮從 Meta 帳號中心匯出的檔案，搜尋 "threads" 資料夾並上傳
           </p>
-          <div class="flex items-center gap-3 py-2.5 px-3 bg-primary/5 rounded-lg w-full pb-4">
-            <template
-              v-for="(item, idx) in [
-                { name: '匯出的資料夾' },
-                { name: 'your ig activity' },
-                { name: 'threads' },
-              ]"
-              :key="item.name"
-            >
-              <div class="flex items-center">
-                <span
-                  class="font-mono text-[13px]"
-                  :class="{ 'font-bold text-primary': idx === 2 }"
-                >
-                  {{ item.name }}
-                </span>
-              </div>
-              <span
-                v-if="idx < 2"
-                class="text-muted-foreground"
-              >/</span>
-            </template>
-          </div>
           <a
             :href="LINKS.TUTORIAL"
             target="_blank"
@@ -55,10 +32,9 @@
             class="hover:underline text-primary"
           >
             <span class="text-sm font-semibold underline">
-              還沒有匯出資料嗎？點我看教學
+              資料哪裡載？上傳失敗？點我看教學
             </span>
           </a>
-          <br>資料不會被傳送到任何伺服器。
         </component>
       </component>
 
@@ -78,6 +54,8 @@
         :upload-error="uploadError"
         :error="error"
         :validation-result="validationResult"
+        :uploaded-folder-name="uploadedFolderName"
+        :is-valid-folder-name="isValidFolderName"
       />
 
       <component
@@ -154,7 +132,7 @@ const Modal = computed(() => ({
   Close: isDesktop.value ? DialogClose : DrawerClose,
 }));
 
-const { selectFolder, handleDroppedFiles, validationResult, isLoading, error, uploadError } = useFileUpload();
+const { selectFolder, handleDroppedFiles, validationResult, isLoading, error, uploadError, uploadedFolderName, isValidFolderName } = useFileUpload();
 
 const isDragging = ref(false);
 

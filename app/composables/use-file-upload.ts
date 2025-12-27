@@ -30,6 +30,8 @@ const validationResult = ref<FileValidationResult | null>(null);
 const isLoading = ref(false);
 const error = ref<string | null>(null);
 const uploadError = ref<UploadError | null>(null);
+const uploadedFolderName = ref<string | null>(null);
+const isValidFolderName = ref<boolean>(true);
 // Track if operation was cancelled to ignore pending results
 let operationCancelled = false;
 
@@ -79,12 +81,48 @@ export function useFileUpload() {
   }
 
   /**
+   * Check if folder name is valid for Threads data export
+   * Valid patterns:
+   * - Starting with "instagram-" (e.g., "instagram-{username}-...")
+   * - Full match "your_instagram_activity"
+   * - Full match "threads"
+   */
+  function isValidFolderNameCheck(folderName: string): boolean {
+    if (!folderName) return false;
+    return (
+      folderName.startsWith('instagram-')
+      || folderName === 'your_instagram_activity'
+      || folderName === 'threads'
+    );
+  }
+
+  /**
+   * Extract the root folder name from file paths
+   */
+  function extractFolderName(fileList: File[]): string | undefined {
+    for (const file of fileList) {
+      const relativePath = (file as File & { webkitRelativePath?: string }).webkitRelativePath || '';
+      if (relativePath) {
+        const parts = relativePath.split('/');
+        if (parts.length > 0 && parts[0]) {
+          return parts[0];
+        }
+      }
+    }
+    return undefined;
+  }
+
+  /**
    * Validate that all required files exist in the uploaded folder
    */
   function validateFiles(fileList: File[]): FileValidationResult {
     const foundFiles: string[] = [];
     const missingFiles: string[] = [];
     const errors: string[] = [];
+
+    // Extract the uploaded folder name
+    const detectedFolderName = extractFolderName(fileList);
+    const validFolderName = detectedFolderName ? isValidFolderNameCheck(detectedFolderName) : true;
 
     // Create a map of file names to files
     const fileMap = new Map<string, File>();
@@ -131,6 +169,8 @@ export function useFileUpload() {
       missingFiles,
       foundFiles,
       errors,
+      uploadedFolderName: detectedFolderName,
+      isValidFolderName: validFolderName,
     };
   }
 
@@ -144,15 +184,17 @@ export function useFileUpload() {
 
     const dirHandle = await window.showDirectoryPicker();
     const files: File[] = [];
+    // Use the selected folder's name as the root path (mimics webkitRelativePath behavior)
+    const rootFolderName = dirHandle.name;
 
     async function getFilesRecursively(
       handle: FileSystemDirectoryHandle,
-      path = '',
+      path: string,
     ): Promise<void> {
       // Iterate directory entries using values() - cast needed for older TS types
       const entries = (handle as unknown as { values(): AsyncIterable<FileSystemHandle> }).values();
       for await (const entry of entries) {
-        const entryPath = path ? `${path}/${entry.name}` : entry.name;
+        const entryPath = `${path}/${entry.name}`;
         if (entry.kind === 'file') {
           const file = await (entry as FileSystemFileHandle).getFile();
           // Add webkitRelativePath-like property
@@ -168,7 +210,7 @@ export function useFileUpload() {
       }
     }
 
-    await getFilesRecursively(dirHandle);
+    await getFilesRecursively(dirHandle, rootFolderName);
 
     return files;
   }
@@ -210,6 +252,8 @@ export function useFileUpload() {
     error.value = null;
     uploadError.value = null;
     validationResult.value = null;
+    uploadedFolderName.value = null;
+    isValidFolderName.value = true;
     operationCancelled = false;
 
     try {
@@ -240,6 +284,11 @@ export function useFileUpload() {
           errors: [],
         };
       }
+
+      // Extract folder name early for error display
+      const folderName = extractFolderName(fileList);
+      uploadedFolderName.value = folderName ?? null;
+      isValidFolderName.value = folderName ? isValidFolderNameCheck(folderName) : true;
 
       // Check file limits before processing
       const limitError = validateFileLimits(fileList);
@@ -298,6 +347,8 @@ export function useFileUpload() {
     error.value = null;
     uploadError.value = null;
     validationResult.value = null;
+    uploadedFolderName.value = null;
+    isValidFolderName.value = true;
     operationCancelled = false;
 
     try {
@@ -322,6 +373,13 @@ export function useFileUpload() {
           };
         }
 
+        // Extract folder name early for error display (do this as we process)
+        if (fileList.length > 0 && !uploadedFolderName.value) {
+          const folderName = extractFolderName(fileList);
+          uploadedFolderName.value = folderName ?? null;
+          isValidFolderName.value = folderName ? isValidFolderNameCheck(folderName) : true;
+        }
+
         // Early check during processing to prevent freezing
         if (isFileCountExceeded(fileList.length)) {
           const limitError = createFileCountError(fileList.length);
@@ -344,6 +402,13 @@ export function useFileUpload() {
           foundFiles: [],
           errors: [],
         };
+      }
+
+      // Extract folder name if not yet extracted
+      if (!uploadedFolderName.value && fileList.length > 0) {
+        const folderName = extractFolderName(fileList);
+        uploadedFolderName.value = folderName ?? null;
+        isValidFolderName.value = folderName ? isValidFolderNameCheck(folderName) : true;
       }
 
       // Check file limits before processing
@@ -469,6 +534,8 @@ export function useFileUpload() {
     isLoading.value = false;
     error.value = null;
     uploadError.value = null;
+    uploadedFolderName.value = null;
+    isValidFolderName.value = true;
   }
 
   return {
@@ -477,6 +544,8 @@ export function useFileUpload() {
     isLoading: readonly(isLoading),
     error: readonly(error),
     uploadError: readonly(uploadError),
+    uploadedFolderName: readonly(uploadedFolderName),
+    isValidFolderName: readonly(isValidFolderName),
     isFileSystemAccessSupported,
     selectFolder,
     handleDroppedFiles,
