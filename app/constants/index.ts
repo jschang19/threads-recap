@@ -3,8 +3,15 @@
  * These are used by both main thread analyzers and web worker
  */
 
-// Re-export time constants from types
-export { YEAR_2025_START, YEAR_2025_END, SAVED_POST_KEYS } from '~/types/threads';
+
+export const YEAR_2025_START = new Date('2025-01-01T00:00:00Z').getTime() / 1000;
+export const YEAR_2025_END = new Date('2025-12-31T23:59:59Z').getTime() / 1000;
+
+// Unicode keys for saved_threads.json (Traditional Chinese)
+export const SAVED_POST_KEYS = {
+  AUTHOR: '\u00e4\u00bd\u009c\u00e8\u0080\u0085', // 作者
+  SAVED_TIME: '\u00e5\u0084\u00b2\u00e5\u00ad\u0098\u00e6\u0099\u0082\u00e9\u0096\u0093', // 儲存時間
+} as const;
 
 /**
  * Stop words to filter out (common Chinese/English words)

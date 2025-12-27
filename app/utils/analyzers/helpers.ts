@@ -2,8 +2,7 @@
  * Shared helper functions for analyzers
  * These are used by both main thread analyzers and web worker
  */
-
-import { YEAR_2025_START, YEAR_2025_END } from '~/types/threads';
+import { YEAR_2025_START, YEAR_2025_END } from '~/constants';
 
 /**
  * Check if a timestamp is in 2025
