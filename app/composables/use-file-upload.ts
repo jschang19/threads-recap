@@ -8,7 +8,7 @@ import type {
   ThreadSavedPostsResponse,
   ParsedThreadsData,
 } from '~/types/threads';
-import { REQUIRED_FILES } from '~/constants';
+import { ANALYZING_FILES } from '~/constants';
 import { completeSingleMedia } from '~/utils/complete-single-media';
 import {
   validateFileLimits,
@@ -73,9 +73,13 @@ export function useFileUpload() {
    * Create an error result
    */
   function createErrorResult(errorMessage: string): FileValidationResult {
+    // Only list required files as missing in error result
+    const requiredFileNames = ANALYZING_FILES
+      .filter(f => f.isRequired)
+      .map(f => f.filename);
     return {
       isValid: false,
-      missingFiles: [...REQUIRED_FILES],
+      missingFiles: requiredFileNames,
       foundFiles: [],
       errors: [errorMessage],
     };

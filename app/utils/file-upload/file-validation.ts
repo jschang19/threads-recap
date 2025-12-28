@@ -4,7 +4,7 @@
  */
 
 import type { FileValidationResult, UploadedFiles } from '~/types/threads';
-import { REQUIRED_FILES } from '~/constants';
+import { ANALYZING_FILES } from '~/constants';
 import { extractFolderName, isValidThreadsFolderName } from './folder-validation';
 
 // File type with optional webkitRelativePath property
@@ -30,6 +30,9 @@ export function validateRequiredFiles(fileList: File[]): FileValidationOutput {
     ? isValidThreadsFolderName(detectedFolderName)
     : true;
 
+  // Create a set of all analyzing file names for quick lookup
+  const analyzingFileNames = new Set(ANALYZING_FILES.map(f => f.filename));
+
   // Create a map of file names to files
   const fileMap = new Map<string, File>();
   for (const file of fileList) {
@@ -38,19 +41,21 @@ export function validateRequiredFiles(fileList: File[]): FileValidationOutput {
     const relativePath = (file as FileWithRelativePath).webkitRelativePath || '';
 
     // Check if file is in the threads subfolder or root
-    if (REQUIRED_FILES.includes(fileName as typeof REQUIRED_FILES[number])) {
+    if (analyzingFileNames.has(fileName)) {
       if (relativePath.includes('/threads/') || relativePath.split('/').length <= 2) {
         fileMap.set(fileName, file);
       }
     }
   }
 
-  for (const requiredFile of REQUIRED_FILES) {
-    if (fileMap.has(requiredFile)) {
-      foundFiles.push(requiredFile);
+  // Check for required and optional files
+  for (const analyzingFile of ANALYZING_FILES) {
+    if (fileMap.has(analyzingFile.filename)) {
+      foundFiles.push(analyzingFile.filename);
     }
-    else {
-      missingFiles.push(requiredFile);
+    else if (analyzingFile.isRequired) {
+      // Only mark as missing if it's required
+      missingFiles.push(analyzingFile.filename);
     }
   }
 
