@@ -214,15 +214,3 @@ export interface AnalysisProgress {
   progress: number; // 0-100
   message: string;
 }
-
-// ============================================
-// Constants
-// ============================================
-
-export const REQUIRED_FILES = [
-  'threads_and_replies.json',
-  'followers.json',
-  'following.json',
-  'liked_threads.json',
-  'saved_threads.json',
-] as const;

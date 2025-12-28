@@ -8,7 +8,7 @@ import type {
   ThreadSavedPostsResponse,
   ParsedThreadsData,
 } from '~/types/threads';
-import { REQUIRED_FILES } from '~/types/threads';
+import { REQUIRED_FILES } from '~/constants';
 import { completeSingleMedia } from '~/utils/complete-single-media';
 import {
   validateFileLimits,
@@ -16,13 +16,16 @@ import {
   createFileCountError,
   type UploadError,
 } from '~/utils/validate-file-limits';
-
-// Extend Window interface for File System Access API
-declare global {
-  interface Window {
-    showDirectoryPicker?: () => Promise<FileSystemDirectoryHandle>;
-  }
-}
+import {
+  isFileSystemAccessSupported as checkFileSystemAccessSupported,
+  selectFolderWithAPI,
+  selectFolderWithInput,
+  processFileSystemEntry,
+  extractFolderName,
+  isValidThreadsFolderName,
+  validateRequiredFiles,
+  parseJsonFile,
+} from '~/utils/file-upload';
 
 // Shared state (singleton pattern) - all instances share the same refs
 const files = ref<UploadedFiles>({});
@@ -39,215 +42,12 @@ export function useFileUpload() {
   /**
    * Check if File System Access API is supported
    */
-  const isFileSystemAccessSupported = computed(() => {
-    return typeof window !== 'undefined' && 'showDirectoryPicker' in window;
-  });
+  const isFileSystemAccessSupported = computed(() => checkFileSystemAccessSupported());
 
   /**
-   * Fix mojibake in parsed JSON (Threads exports have encoding issues)
+   * Reset state before starting a new operation
    */
-  function fixMojibake(obj: unknown): unknown {
-    if (typeof obj === 'string') {
-      try {
-        // Try to decode Latin-1 to UTF-8
-        const bytes = new Uint8Array(obj.split('').map(c => c.charCodeAt(0)));
-        return new TextDecoder('utf-8').decode(bytes);
-      }
-      catch {
-        return obj;
-      }
-    }
-    if (Array.isArray(obj)) {
-      return obj.map(fixMojibake);
-    }
-    if (obj && typeof obj === 'object') {
-      const result: Record<string, unknown> = {};
-      for (const [key, value] of Object.entries(obj)) {
-        const fixedKey = typeof key === 'string' ? fixMojibake(key) as string : key;
-        result[fixedKey] = fixMojibake(value);
-      }
-      return result;
-    }
-    return obj;
-  }
-
-  /**
-   * Read and parse a JSON file
-   */
-  async function parseJsonFile<T>(file: File): Promise<T> {
-    const text = await file.text();
-    const parsed = JSON.parse(text);
-    return fixMojibake(parsed) as T;
-  }
-
-  /**
-   * Check if folder name is valid for Threads data export
-   * Valid patterns:
-   * - Starting with "instagram-" (e.g., "instagram-{username}-...")
-   * - Full match "your_instagram_activity"
-   * - Full match "threads"
-   */
-  function isValidFolderNameCheck(folderName: string): boolean {
-    if (!folderName) return false;
-    return (
-      folderName.startsWith('instagram-')
-      || folderName === 'your_instagram_activity'
-      || folderName === 'threads'
-    );
-  }
-
-  /**
-   * Extract the root folder name from file paths
-   */
-  function extractFolderName(fileList: File[]): string | undefined {
-    for (const file of fileList) {
-      const relativePath = (file as File & { webkitRelativePath?: string }).webkitRelativePath || '';
-      if (relativePath) {
-        const parts = relativePath.split('/');
-        if (parts.length > 0 && parts[0]) {
-          return parts[0];
-        }
-      }
-    }
-    return undefined;
-  }
-
-  /**
-   * Validate that all required files exist in the uploaded folder
-   */
-  function validateFiles(fileList: File[]): FileValidationResult {
-    const foundFiles: string[] = [];
-    const missingFiles: string[] = [];
-    const errors: string[] = [];
-
-    // Extract the uploaded folder name
-    const detectedFolderName = extractFolderName(fileList);
-    const validFolderName = detectedFolderName ? isValidFolderNameCheck(detectedFolderName) : true;
-
-    // Create a map of file names to files
-    const fileMap = new Map<string, File>();
-    for (const file of fileList) {
-      // Handle both flat structure and nested structure
-      const fileName = file.name;
-      const relativePath = (file as File & { webkitRelativePath?: string }).webkitRelativePath || '';
-
-      // Check if file is in the threads subfolder or root
-      if (REQUIRED_FILES.includes(fileName as typeof REQUIRED_FILES[number])) {
-        if (relativePath.includes('/threads/') || relativePath.split('/').length <= 2) {
-          fileMap.set(fileName, file);
-        }
-      }
-    }
-
-    for (const requiredFile of REQUIRED_FILES) {
-      if (fileMap.has(requiredFile)) {
-        foundFiles.push(requiredFile);
-      }
-      else {
-        missingFiles.push(requiredFile);
-      }
-    }
-
-    // Store files in ref
-    files.value = {
-      threadsAndReplies: fileMap.get('threads_and_replies.json'),
-      followers: fileMap.get('followers.json'),
-      following: fileMap.get('following.json'),
-      likedThreads: fileMap.get('liked_threads.json'),
-      savedThreads: fileMap.get('saved_threads.json'),
-    };
-
-    const isValid = missingFiles.length === 0;
-
-    if (!isValid) {
-      errors.push(`缺少必要檔案：${missingFiles.join(', ')}`);
-      errors.push('請確認您上傳的是 Threads 匯出資料夾');
-    }
-
-    return {
-      isValid,
-      missingFiles,
-      foundFiles,
-      errors,
-      uploadedFolderName: detectedFolderName,
-      isValidFolderName: validFolderName,
-    };
-  }
-
-  /**
-   * Handle folder selection using File System Access API
-   */
-  async function selectFolderWithAPI(): Promise<File[]> {
-    if (!window.showDirectoryPicker) {
-      throw new Error('您的瀏覽器不支援資料夾選擇功能');
-    }
-
-    const dirHandle = await window.showDirectoryPicker();
-    const files: File[] = [];
-    // Use the selected folder's name as the root path (mimics webkitRelativePath behavior)
-    const rootFolderName = dirHandle.name;
-
-    async function getFilesRecursively(
-      handle: FileSystemDirectoryHandle,
-      path: string,
-    ): Promise<void> {
-      // Iterate directory entries using values() - cast needed for older TS types
-      const entries = (handle as unknown as { values(): AsyncIterable<FileSystemHandle> }).values();
-      for await (const entry of entries) {
-        const entryPath = `${path}/${entry.name}`;
-        if (entry.kind === 'file') {
-          const file = await (entry as FileSystemFileHandle).getFile();
-          // Add webkitRelativePath-like property
-          Object.defineProperty(file, 'webkitRelativePath', {
-            value: entryPath,
-            writable: false,
-          });
-          files.push(file);
-        }
-        else if (entry.kind === 'directory') {
-          await getFilesRecursively(entry as FileSystemDirectoryHandle, entryPath);
-        }
-      }
-    }
-
-    await getFilesRecursively(dirHandle, rootFolderName);
-
-    return files;
-  }
-
-  /**
-   * Handle folder selection using input element fallback
-   */
-  async function selectFolderWithInput(): Promise<File[]> {
-    return new Promise((resolve, reject) => {
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.webkitdirectory = true;
-      // @ts-expect-error - directory is non-standard but supported
-      input.directory = true;
-      input.multiple = true;
-
-      input.onchange = () => {
-        if (input.files && input.files.length > 0) {
-          resolve(Array.from(input.files));
-        }
-        else {
-          reject(new Error('未選擇任何檔案'));
-        }
-      };
-
-      input.oncancel = () => {
-        reject(new Error('已取消選擇'));
-      };
-
-      input.click();
-    });
-  }
-
-  /**
-   * Main function to select and validate folder
-   */
-  async function selectFolder(): Promise<FileValidationResult> {
+  function resetState() {
     isLoading.value = true;
     error.value = null;
     uploadError.value = null;
@@ -255,6 +55,81 @@ export function useFileUpload() {
     uploadedFolderName.value = null;
     isValidFolderName.value = true;
     operationCancelled = false;
+  }
+
+  /**
+   * Create a cancelled result
+   */
+  function createCancelledResult(): FileValidationResult {
+    return {
+      isValid: false,
+      missingFiles: [],
+      foundFiles: [],
+      errors: [],
+    };
+  }
+
+  /**
+   * Create an error result
+   */
+  function createErrorResult(errorMessage: string): FileValidationResult {
+    return {
+      isValid: false,
+      missingFiles: [...REQUIRED_FILES],
+      foundFiles: [],
+      errors: [errorMessage],
+    };
+  }
+
+  /**
+   * Update folder name state from file list
+   */
+  function updateFolderNameState(fileList: File[]) {
+    const folderName = extractFolderName(fileList);
+    uploadedFolderName.value = folderName ?? null;
+    isValidFolderName.value = folderName ? isValidThreadsFolderName(folderName) : true;
+  }
+
+  /**
+   * Handle file limit validation errors
+   */
+  function handleLimitError(limitError: UploadError): FileValidationResult {
+    uploadError.value = limitError;
+    error.value = limitError.message;
+    return {
+      isValid: false,
+      missingFiles: [],
+      foundFiles: [],
+      errors: [limitError.message],
+    };
+  }
+
+  /**
+   * Process and validate file list
+   */
+  function processFileList(fileList: File[]): FileValidationResult {
+    // Check file limits before processing
+    const limitError = validateFileLimits(fileList);
+    if (limitError) {
+      return handleLimitError(limitError);
+    }
+
+    const { result, files: extractedFiles } = validateRequiredFiles(fileList);
+    files.value = extractedFiles;
+    validationResult.value = result;
+
+    if (!result.isValid) {
+      error.value = result.errors.join('\n');
+    }
+
+    return result;
+  }
+
+  /**
+   * Main function to select and validate folder
+   */
+  async function selectFolder(): Promise<FileValidationResult> {
+    resetState();
 
     try {
       let fileList: File[];
@@ -277,60 +152,23 @@ export function useFileUpload() {
 
       // Check if operation was cancelled while waiting
       if (operationCancelled) {
-        return {
-          isValid: false,
-          missingFiles: [],
-          foundFiles: [],
-          errors: [],
-        };
+        return createCancelledResult();
       }
 
       // Extract folder name early for error display
-      const folderName = extractFolderName(fileList);
-      uploadedFolderName.value = folderName ?? null;
-      isValidFolderName.value = folderName ? isValidFolderNameCheck(folderName) : true;
+      updateFolderNameState(fileList);
 
-      // Check file limits before processing
-      const limitError = validateFileLimits(fileList);
-      if (limitError) {
-        uploadError.value = limitError;
-        error.value = limitError.message;
-        return {
-          isValid: false,
-          missingFiles: [],
-          foundFiles: [],
-          errors: [limitError.message],
-        };
-      }
-
-      const result = validateFiles(fileList);
-      validationResult.value = result;
-
-      if (!result.isValid) {
-        error.value = result.errors.join('\n');
-      }
-
-      return result;
+      return processFileList(fileList);
     }
     catch (e) {
       // Don't set error if operation was cancelled
       if (operationCancelled) {
-        return {
-          isValid: false,
-          missingFiles: [],
-          foundFiles: [],
-          errors: [],
-        };
+        return createCancelledResult();
       }
 
       const errorMessage = e instanceof Error ? e.message : '發生未知錯誤';
       error.value = errorMessage;
-      return {
-        isValid: false,
-        missingFiles: [...REQUIRED_FILES],
-        foundFiles: [],
-        errors: [errorMessage],
-      };
+      return createErrorResult(errorMessage);
     }
     finally {
       if (!operationCancelled) {
@@ -343,13 +181,7 @@ export function useFileUpload() {
    * Handle files dropped via drag and drop
    */
   async function handleDroppedFiles(items: DataTransferItemList): Promise<FileValidationResult> {
-    isLoading.value = true;
-    error.value = null;
-    uploadError.value = null;
-    validationResult.value = null;
-    uploadedFolderName.value = null;
-    isValidFolderName.value = true;
-    operationCancelled = false;
+    resetState();
 
     try {
       const fileList: File[] = [];
@@ -359,132 +191,52 @@ export function useFileUpload() {
         if (item.kind === 'file') {
           const entry = item.webkitGetAsEntry?.();
           if (entry) {
-            await processEntry(entry, fileList);
+            await processFileSystemEntry(entry, fileList);
           }
         }
 
         // Check if operation was cancelled during processing
         if (operationCancelled) {
-          return {
-            isValid: false,
-            missingFiles: [],
-            foundFiles: [],
-            errors: [],
-          };
+          return createCancelledResult();
         }
 
         // Extract folder name early for error display (do this as we process)
         if (fileList.length > 0 && !uploadedFolderName.value) {
-          const folderName = extractFolderName(fileList);
-          uploadedFolderName.value = folderName ?? null;
-          isValidFolderName.value = folderName ? isValidFolderNameCheck(folderName) : true;
+          updateFolderNameState(fileList);
         }
 
         // Early check during processing to prevent freezing
         if (isFileCountExceeded(fileList.length)) {
           const limitError = createFileCountError(fileList.length);
-          uploadError.value = limitError;
-          error.value = limitError.message;
-          return {
-            isValid: false,
-            missingFiles: [],
-            foundFiles: [],
-            errors: [limitError.message],
-          };
+          return handleLimitError(limitError);
         }
       }
 
       // Check if operation was cancelled while waiting
       if (operationCancelled) {
-        return {
-          isValid: false,
-          missingFiles: [],
-          foundFiles: [],
-          errors: [],
-        };
+        return createCancelledResult();
       }
 
       // Extract folder name if not yet extracted
       if (!uploadedFolderName.value && fileList.length > 0) {
-        const folderName = extractFolderName(fileList);
-        uploadedFolderName.value = folderName ?? null;
-        isValidFolderName.value = folderName ? isValidFolderNameCheck(folderName) : true;
+        updateFolderNameState(fileList);
       }
 
-      // Check file limits before processing
-      const limitError = validateFileLimits(fileList);
-      if (limitError) {
-        uploadError.value = limitError;
-        error.value = limitError.message;
-        return {
-          isValid: false,
-          missingFiles: [],
-          foundFiles: [],
-          errors: [limitError.message],
-        };
-      }
-
-      const result = validateFiles(fileList);
-      validationResult.value = result;
-
-      if (!result.isValid) {
-        error.value = result.errors.join('\n');
-      }
-
-      return result;
+      return processFileList(fileList);
     }
     catch (e) {
       // Don't set error if operation was cancelled
       if (operationCancelled) {
-        return {
-          isValid: false,
-          missingFiles: [],
-          foundFiles: [],
-          errors: [],
-        };
+        return createCancelledResult();
       }
 
       const errorMessage = e instanceof Error ? e.message : '發生未知錯誤';
       error.value = errorMessage;
-      return {
-        isValid: false,
-        missingFiles: [...REQUIRED_FILES],
-        foundFiles: [],
-        errors: [errorMessage],
-      };
+      return createErrorResult(errorMessage);
     }
     finally {
       if (!operationCancelled) {
         isLoading.value = false;
-      }
-    }
-  }
-
-  /**
-   * Recursively process file system entries
-   */
-  async function processEntry(entry: FileSystemEntry, fileList: File[], path = ''): Promise<void> {
-    if (entry.isFile) {
-      const fileEntry = entry as FileSystemFileEntry;
-      const file = await new Promise<File>((resolve, reject) => {
-        fileEntry.file(resolve, reject);
-      });
-      const fullPath = path ? `${path}/${entry.name}` : entry.name;
-      Object.defineProperty(file, 'webkitRelativePath', {
-        value: fullPath,
-        writable: false,
-      });
-      fileList.push(file);
-    }
-    else if (entry.isDirectory) {
-      const dirEntry = entry as FileSystemDirectoryEntry;
-      const reader = dirEntry.createReader();
-      const entries = await new Promise<FileSystemEntry[]>((resolve, reject) => {
-        reader.readEntries(resolve, reject);
-      });
-      const newPath = path ? `${path}/${entry.name}` : entry.name;
-      for (const childEntry of entries) {
-        await processEntry(childEntry, fileList, newPath);
       }
     }
   }

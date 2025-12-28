@@ -84,15 +84,18 @@ export const MOCK_DEMO_DATA = {
   topKeywords: ['單身', '感情', '爛台大'],
 };
 
-// const title = 'Threads 2025 年度總回顧 - Threadseeker';
-// const description
-//   = '用 Threadseeker Recap 來建立你的 threads.com 2025 年度回顧紀錄！幫你分析這一整年在脆的發文紀錄與數據，還有最常提及的朋友與打的關鍵字。';
-// const keywords = 'threads';
-// const ogImagePath = '/images/banner.webp';
-
 export const SEO_CONFIG = {
   title: 'Threads 2025 年度總回顧 - Threadseeker',
   description: '用 Threadseeker Recap 來建立你的 threads.com 2025 年度回顧紀錄！幫你分析這一整年在脆的發文紀錄與數據，還有最常提及的朋友與打的關鍵字。',
   keywords: 'threads',
   ogImagePath: '/images/banner.webp',
 };
+
+// Rerquired files for the analysis
+// saved_threads.json is not essential since some users may not have saved any posts
+export const REQUIRED_FILES = [
+  'threads_and_replies.json',
+  'followers.json',
+  'following.json',
+  'liked_threads.json',
+] as const;
