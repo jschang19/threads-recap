@@ -6,8 +6,8 @@
 export const YEAR_2025_START = new Date('2025-01-01T00:00:00Z').getTime() / 1000;
 export const YEAR_2025_END = new Date('2025-12-31T23:59:59Z').getTime() / 1000;
 
-export const FILE_SIZE_LIMIT = 1024 * 1024 * 75; // 75MB
-export const MAX_FILE_COUNT = 300; // Maximum number of files allowed in uploaded folder
+export const FILE_SIZE_LIMIT = 1024 * 1024 * 150; // 150MB
+export const MAX_FILE_COUNT = 20; // Maximum number of files allowed in uploaded folder
 
 // Unicode keys for saved_threads.json (Traditional Chinese)
 export const SAVED_POST_KEYS = {
