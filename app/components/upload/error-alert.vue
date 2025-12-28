@@ -86,7 +86,7 @@ interface ValidationResult {
   readonly isValidFolderName?: boolean;
 }
 
-const DISPLAY_FOLDER_NAME = 'instagram_activity -> threads' as const;
+const DISPLAY_FOLDER_NAME = 'your_instagram_activity -> threads' as const;
 
 defineProps<{
   uploadError: UploadError | null;
