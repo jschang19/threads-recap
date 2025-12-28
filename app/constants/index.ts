@@ -91,14 +91,7 @@ export const SEO_CONFIG = {
   ogImagePath: '/images/banner.webp',
 };
 
-// Files for the analysis with required flag
-// saved_threads.json is optional since some users may not have saved any posts
-export interface AnalyzingFile {
-  filename: string;
-  isRequired: boolean;
-}
-
-export const ANALYZING_FILES: AnalyzingFile[] = [
+export const ANALYZING_FILES: { filename: string; isRequired: boolean }[] = [
   { filename: 'threads_and_replies.json', isRequired: true },
   { filename: 'followers.json', isRequired: true },
   { filename: 'following.json', isRequired: true },

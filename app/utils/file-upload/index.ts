@@ -28,3 +28,9 @@ export {
 // JSON parsing
 export { parseJsonFile } from './parse-json';
 
+// Error result creators
+export {
+  createCancelledResult,
+  createErrorResult,
+  createLimitErrorResult,
+} from './create-errors';
