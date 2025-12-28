@@ -29,7 +29,7 @@ export function analyzeTextCore(posts: ParsedThreadsData['posts']): TextAnalysis
     .slice(0, 3);
 
   return {
-    totalPosts: posts.length,
+    totalPosts: posts2025.length,
     totalWordCount,
     totalCharCount,
     averageWordsPerPost: posts2025.length > 0 ? Math.round(totalWordCount / posts2025.length) : 0,
@@ -37,5 +37,3 @@ export function analyzeTextCore(posts: ParsedThreadsData['posts']): TextAnalysis
     topKeywords: [],
   };
 }
-
-

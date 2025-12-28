@@ -21,7 +21,7 @@
       >
         <div class="flex justify-center items-center">
           <RecapCard
-            :posts-count="result.time.postsIn2025"
+            :posts-count="result.text.totalPosts"
             :total-word-count="result.text.totalWordCount"
             :likes-count="result.social.likesIn2025"
             :new-followers-count="result.social.newFollowersIn2025"
