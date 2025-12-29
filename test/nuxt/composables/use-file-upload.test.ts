@@ -54,13 +54,13 @@ describe('useFileUpload', () => {
 
   it('should have parseAllFiles function', () => {
     const { parseAllFiles } = useFileUpload();
-    
+
     expect(typeof parseAllFiles).toBe('function');
   });
 
   it('should expose isFileSystemAccessSupported computed', () => {
     const { isFileSystemAccessSupported } = useFileUpload();
-    
+
     expect(typeof isFileSystemAccessSupported.value).toBe('boolean');
   });
 });

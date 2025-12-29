@@ -35,7 +35,7 @@ describe('validateFileLimits', () => {
     const files = Array.from({ length: numChunks }, (_, i) =>
       new File([chunk], `file${i}.json`, { type: 'application/json' }),
     );
-    
+
     const error = validateFileLimits(files);
     expect(error).not.toBeNull();
     expect(error?.type).toBe('file_too_large');

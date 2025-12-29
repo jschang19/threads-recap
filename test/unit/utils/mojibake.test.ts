@@ -65,7 +65,7 @@ describe('fixMojibake', () => {
     // This is the mojibake version of Chinese text (latin-1 misencoded UTF-8)
     const mojibakeString = '\u00e5\u00a4\u00a7\u00e9\u00a0\u00ad\u00e8\u00b2\u00bc\u00e7\u0085\u00a7';
     const result = fixMojibake(mojibakeString);
-    
+
     // After fixing, it should be proper Chinese characters
     expect(result).toBe('大頭貼照');
   });
@@ -76,7 +76,7 @@ describe('fixMojibake', () => {
       description: '\u00e6\u00b8\u00ac\u00e8\u00a9\u00a6',
     };
     const result = fixMojibake(input) as { name: string; description: string };
-    
+
     expect(result.name).toBe('大頭貼照');
     expect(result.description).toBe('測試');
   });
@@ -87,7 +87,7 @@ describe('fixMojibake', () => {
       '\u00e6\u00b8\u00ac\u00e8\u00a9\u00a6',
     ];
     const result = fixMojibake(input) as string[];
-    
+
     expect(result[0]).toBe('大頭貼照');
     expect(result[1]).toBe('測試');
   });

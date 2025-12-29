@@ -12,7 +12,7 @@ describe('useFileParser', () => {
 
   it('should parse valid threads data file', async () => {
     const { parseAllFiles } = useFileParser();
-    
+
     const threadsData = {
       text_post_app_text_posts: [
         {
@@ -47,7 +47,7 @@ describe('useFileParser', () => {
 
   it('should parse all optional files when provided', async () => {
     const { parseAllFiles } = useFileParser();
-    
+
     const threadsData = {
       text_post_app_text_posts: [
         {
@@ -111,7 +111,7 @@ describe('useFileParser', () => {
 
   it('should handle missing optional files gracefully', async () => {
     const { parseAllFiles } = useFileParser();
-    
+
     const threadsData = {
       text_post_app_text_posts: [
         {

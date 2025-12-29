@@ -3,6 +3,10 @@ import { SEO_CONFIG } from './app/constants';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  appId: 'tks-recap',
+  modules: ['@nuxt/eslint', '@nuxt/scripts', 'motion-v/nuxt', 'shadcn-nuxt', '@nuxt/test-utils/module'],
+  ssr: false,
+  devtools: { enabled: true },
   app: {
     head: {
       title: SEO_CONFIG.title,
@@ -25,10 +29,25 @@ export default defineNuxtConfig({
       ],
     },
   },
-  appId: 'tks-recap',
-  compatibilityDate: '2025-12-25',
   css: ['~/assets/css/tailwind.css'],
-  devtools: { enabled: true },
+  spaLoadingTemplate: true,
+  runtimeConfig: {
+    public: {
+      scripts: {
+        clarity: {
+          id: process.env.NUXT_PUBLIC_SCRIPTS_CLARITY_ID || 'urls3y4osz',
+        },
+      },
+      siteHost: process.env.NUXT_PUBLIC_SITE_HOST || 'https://recap.threadseeker.app',
+    },
+  },
+  compatibilityDate: '2025-12-25',
+  nitro: {
+    compressPublicAssets: true,
+  },
+  vite: {
+    plugins: [tailwindcss()],
+  },
   eslint: {
     config: {
       stylistic: {
@@ -38,28 +57,9 @@ export default defineNuxtConfig({
       },
     },
   },
-  modules: ['@nuxt/eslint', '@nuxt/scripts', 'motion-v/nuxt', 'shadcn-nuxt', '@nuxt/test-utils/module'],
-  nitro: {
-    compressPublicAssets: true,
-  },
-  runtimeConfig: {
-    public: {
-      scripts:{
-        clarity: {
-          id: process.env.NUXT_PUBLIC_SCRIPTS_CLARITY_ID || 'urls3y4osz',
-        },
-      },
-      siteHost: process.env.NUXT_PUBLIC_SITE_HOST || 'https://recap.threadseeker.app',
-    },
-  },
-  scripts:{
+  scripts: {
     registry: {
-      clarity: true
-    }
-  },
-  spaLoadingTemplate: true,
-  ssr: false,
-  vite: {
-    plugins: [tailwindcss()],
+      clarity: true,
+    },
   },
 });

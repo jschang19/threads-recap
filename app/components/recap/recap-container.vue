@@ -31,7 +31,7 @@
 <script setup lang="ts">
 import { useSwipe, onKeyStroke, useMediaQuery } from '@vueuse/core';
 import RecapNavigation from './recap-navigation.vue';
-import { 
+import {
   RecapWelcomePage,
   RecapTotalPosts,
   RecapTotalWords,

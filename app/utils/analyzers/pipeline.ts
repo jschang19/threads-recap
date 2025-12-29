@@ -15,7 +15,6 @@ import { analyzeSocialCore } from './core/social';
 import { analyzeTextCore } from './core/text';
 import { analyzeTimeCore } from './core/time';
 
-
 /**
  * Run the complete analysis pipeline
  * @param data - Parsed threads data
