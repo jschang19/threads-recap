@@ -38,7 +38,7 @@ export default defineNuxtConfig({
       },
     },
   },
-  modules: ['@nuxt/eslint', '@nuxt/scripts', 'motion-v/nuxt', 'shadcn-nuxt'],
+  modules: ['@nuxt/eslint', '@nuxt/scripts', 'motion-v/nuxt', 'shadcn-nuxt', '@nuxt/test-utils/module'],
   nitro: {
     compressPublicAssets: true,
   },

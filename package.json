@@ -9,7 +9,11 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint --fix",
-    "lint:fix": "eslint --fix"
+    "lint:fix": "eslint --fix",
+    "test": "vitest",
+    "test:unit": "vitest --project unit",
+    "test:nuxt": "vitest --project nuxt",
+    "test:watch": "vitest --watch"
   },
   "dependencies": {
     "@nuxt/eslint": "1.12.1",
@@ -38,10 +42,15 @@
   },
   "packageManager": "pnpm@8.14.3+sha512.c3ed80eb583be3e2b7ef31eb96b8b9cfaa0503e5d44ec717514120b5187b2f933736e9038c51a5a23ad582790ba41d4ab784618c89fa7e2365f6665685d612ee",
   "devDependencies": {
+    "@nuxt/test-utils": "^3.21.0",
     "@tailwindcss/vite": "^4.1.18",
     "@types/d3": "^7.4.3",
     "@types/node": "^25.0.3",
+    "@vue/test-utils": "^2.4.6",
+    "happy-dom": "^20.0.11",
+    "playwright-core": "^1.57.0",
     "tailwindcss": "^4.1.18",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
   }
 }
