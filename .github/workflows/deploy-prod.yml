@@ -86,6 +86,7 @@ jobs:
           repository: ${{ github.repository }}
           branch: ${{ github.ref_name }}
           author: ${{ github.actor }}
+          commit_sha: ${{ github.sha }}
           telegram_chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
           telegram_token: ${{ secrets.TELEGRAM_TOKEN }}
           preview_url: ${{ steps.cf-deploy.outputs.deployment-url }}
