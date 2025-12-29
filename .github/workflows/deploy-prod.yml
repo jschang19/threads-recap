@@ -74,7 +74,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           preCommands: |
             echo "Deploying to production environment"
-          command: pages deploy .output/public --project-name=${{ vars.PROJECT_NAME }} --branch=main
+          command: pages deploy dist --project-name=${{ vars.PROJECT_NAME }} --branch=main
 
       - name: Notify Telegram
         if: always()
