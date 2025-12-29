@@ -19,7 +19,7 @@
     <div class="grid grid-cols-2 gap-6 text-left">
       <div>
         <p class="text-xs text-muted-foreground">
-          發文數
+          貼文與留言數
         </p>
         <p class="text-2xl font-medium">
           {{ postsCount }}
@@ -27,7 +27,7 @@
       </div>
       <div>
         <p class="text-xs text-muted-foreground">
-          字數
+          累積字數
         </p>
         <p class="text-2xl font-medium">
           {{ formattedWordCount }}
