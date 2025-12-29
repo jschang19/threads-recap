@@ -1,0 +1,61 @@
+name: 'Telegram Notification'
+description: 'Send deployment notification to Telegram'
+
+inputs:
+  status:
+    description: 'Deployment status (success/failure)'
+    required: true
+  environment:
+    description: 'Deployment environment (Production/Preview)'
+    required: true
+  project_name:
+    description: 'Project name'
+    required: true
+  repository:
+    description: 'Repository name'
+    required: true
+  branch:
+    description: 'Branch name'
+    required: true
+  author:
+    description: 'Commit author'
+    required: true
+  telegram_chat_id:
+    description: 'Telegram chat ID'
+    required: true
+  telegram_token:
+    description: 'Telegram bot token'
+    required: true
+  preview_url:
+    description: 'Preview/Deployment URL (optional)'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Send Success Notification
+      if: inputs.status == 'success'
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ inputs.telegram_chat_id }}
+        token: ${{ inputs.telegram_token }}
+        message: |
+          ✅ [${{ inputs.project_name }}] ${{ inputs.environment }} Deployment Success!
+          Branch: ${{ inputs.branch }}
+          Repository: ${{ inputs.repository }}
+          Author: ${{ inputs.author }}
+          ${{ inputs.preview_url != '' && format('URL: {0}', inputs.preview_url) || '' }}
+
+    - name: Send Failure Notification
+      if: inputs.status == 'failure'
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ inputs.telegram_chat_id }}
+        token: ${{ inputs.telegram_token }}
+        message: |
+          ❌ [${{ inputs.project_name }}] ${{ inputs.environment }} Deployment Failed
+          Branch: ${{ inputs.branch }}
+          Repository: ${{ inputs.repository }}
+          Author: ${{ inputs.author }}
+

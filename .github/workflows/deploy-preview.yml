@@ -1,0 +1,94 @@
+# .github/workflows/deploy-preview.yml
+name: Deploy Preview
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+    branches:
+      - 'feature/**'
+      - 'fix/**'
+
+concurrency:
+  group: deploy-preview-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: true
+
+env:
+  NUXT_PUBLIC_SITE_HOST: ${{ vars.SITE_HOST }}
+  NUXT_PUBLIC_SCRIPTS_CLARITY_ID: ${{ vars.CLARITY_ID }}
+
+jobs:
+  deploy-preview:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    permissions:
+      contents: read
+      deployments: write
+      pull-requests: write
+    name: Deploy Preview
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Set Up Pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.14.3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build --preset=cloudflare_pages
+
+      - name: Deploy Preview
+        id: cf-deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          preCommands: |
+            echo "Deploying preview for ${{ github.event.workflow_run.head_branch }}"
+          command: pages deploy .output/public --project-name=${{ vars.PROJECT_NAME }} --branch=${{ github.event.workflow_run.head_branch }}
+
+      - name: Comment Preview URL on PR
+        if: success() && github.event.workflow_run.pull_requests[0]
+        uses: actions/github-script@v7
+        env:
+          PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number }}
+          DEPLOY_URL: ${{ steps.cf-deploy.outputs.deployment-url }}
+        with:
+          script: |
+            const url = process.env.DEPLOY_URL;
+            const prNumber = parseInt(process.env.PR_NUMBER, 10);
+            if (url && prNumber) {
+              github.rest.issues.createComment({
+                issue_number: prNumber,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `🚀 **Preview Deployed!**\n\n📎 Preview URL: ${url}`
+              });
+            }
+
+      - name: Notify Telegram
+        if: always()
+        uses: ./.github/actions/telegram-notify
+        with:
+          status: ${{ job.status }}
+          environment: Preview
+          project_name: ${{ vars.PROJECT_NAME }}
+          repository: ${{ github.repository }}
+          branch: ${{ github.event.workflow_run.head_branch }}
+          author: ${{ github.event.workflow_run.actor.login }}
+          telegram_chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
+          telegram_token: ${{ secrets.TELEGRAM_TOKEN }}
+          preview_url: ${{ steps.cf-deploy.outputs.deployment-url }}

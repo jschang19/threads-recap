@@ -1,0 +1,73 @@
+# .github/workflows/deploy-prod.yml
+name: Deploy Production
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+    branches:
+      - 'main'
+
+concurrency:
+  group: deploy-prod-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: true
+
+env:
+  NUXT_PUBLIC_SITE_HOST: ${{ vars.SITE_HOST }}
+  NUXT_PUBLIC_SCRIPTS_CLARITY_ID: ${{ vars.CLARITY_ID }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    permissions:
+      contents: read
+      deployments: write
+    name: Deploy to Production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Set Up Pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.14.3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build --preset=cloudflare_pages
+
+      - name: Deploy
+        id: cf-deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          preCommands: |
+            echo "Deploying to production environment"
+          command: pages deploy .output/public --project-name=${{ vars.PROJECT_NAME }} --branch=${{ github.event.workflow_run.head_branch }}
+
+      - name: Notify Telegram
+        if: always()
+        uses: ./.github/actions/telegram-notify
+        with:
+          status: ${{ job.status }}
+          environment: Production
+          project_name: ${{ vars.PROJECT_NAME }}
+          repository: ${{ github.repository }}
+          branch: ${{ github.event.workflow_run.head_branch }}
+          author: ${{ github.event.workflow_run.actor.login }}
+          telegram_chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
+          telegram_token: ${{ secrets.TELEGRAM_TOKEN }}
+          preview_url: ${{ steps.cf-deploy.outputs.deployment-url }}
