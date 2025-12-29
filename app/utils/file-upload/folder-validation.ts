@@ -37,4 +37,3 @@ export function extractFolderName(fileList: File[]): string | undefined {
   }
   return undefined;
 }
-

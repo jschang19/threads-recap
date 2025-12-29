@@ -32,6 +32,3 @@ defineProps<{
   }>;
 }>();
 </script>
-
-
-

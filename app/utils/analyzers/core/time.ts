@@ -71,5 +71,3 @@ export function analyzeTimeCore(posts: ParsedThreadsData['posts']): TimeAnalysis
     postsIn2025: posts2025.length,
   };
 }
-
-

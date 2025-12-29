@@ -34,5 +34,3 @@ export function analyzeKeywordsCore(posts: ParsedThreadsData['posts']): KeywordC
     .sort((a, b) => b.count - a.count)
     .slice(0, 20);
 }
-
-

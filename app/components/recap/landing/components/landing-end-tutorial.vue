@@ -30,6 +30,3 @@ withDefaults(
   },
 );
 </script>
-
-
-

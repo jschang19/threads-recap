@@ -72,5 +72,3 @@ const emit = defineEmits<{
   opacity: 0;
 }
 </style>
-
-
