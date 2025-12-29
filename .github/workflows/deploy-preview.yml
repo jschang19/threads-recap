@@ -75,7 +75,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           preCommands: |
             echo "Deploying preview for ${{ github.head_ref }}"
-          command: pages deploy .output/public --project-name=${{ vars.PROJECT_NAME }} --branch=${{ github.head_ref }}
+          command: pages deploy dist --project-name=${{ vars.PROJECT_NAME }} --branch=${{ github.head_ref }}
 
       - name: Comment Preview URL on PR
         if: success()
