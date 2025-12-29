@@ -7,9 +7,7 @@ on:
     types:
       - completed
     branches:
-      - 'main'        # For PRs targeting main
-      - 'feature/**'  # For direct pushes to feature branches
-      - 'fix/**'      # For direct pushes to fix branches
+      - 'main'
 
 concurrency:
   group: deploy-preview-${{ github.event.workflow_run.head_branch }}
@@ -22,11 +20,10 @@ env:
 jobs:
   deploy-preview:
     runs-on: ubuntu-latest
-    # Run if CI passed AND (it's a PR OR it's a push to non-main branch)
+    # Only run if CI succeeded AND it was a pull_request event
     if: >
       github.event.workflow_run.conclusion == 'success' &&
-      (github.event.workflow_run.event == 'pull_request' ||
-       github.event.workflow_run.head_branch != 'main')
+      github.event.workflow_run.event == 'pull_request'
     permissions:
       contents: read
       deployments: write
