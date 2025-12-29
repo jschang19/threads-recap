@@ -92,6 +92,21 @@ If you are a developer, The following is some technical details about this proje
    ```
    Open `http://localhost:3000` in your browser to see the result.
 
+4. **Run tests**
+   ```bash
+   # Run all tests
+   pnpm vitest --run
+   
+   # Run only unit tests
+   pnpm test:unit --run
+   
+   # Run only Nuxt environment tests
+   pnpm test:nuxt --run
+   
+   # Run tests in watch mode
+   pnpm test:watch
+   ```
+
 ### Production environment build
 Build static site (SSG):
 ```bash
