@@ -7,9 +7,8 @@ on:
     types:
       - completed
     branches:
-      - 'main'        # For PRs targeting main
-      - 'feature/**'  # For direct pushes to feature branches
-      - 'fix/**'      # For direct pushes to fix branches
+      - 'feature/**'
+      - 'fix/**'
 
 concurrency:
   group: deploy-preview-${{ github.event.workflow_run.head_branch }}
@@ -22,11 +21,8 @@ env:
 jobs:
   deploy-preview:
     runs-on: ubuntu-latest
-    # Run if CI passed AND (it's a PR OR it's a push to non-main branch)
-    if: >
-      github.event.workflow_run.conclusion == 'success' &&
-      (github.event.workflow_run.event == 'pull_request' ||
-       github.event.workflow_run.head_branch != 'main')
+    # Only run if CI succeeded
+    if: github.event.workflow_run.conclusion == 'success'
     permissions:
       contents: read
       deployments: write
@@ -62,25 +58,6 @@ jobs:
           preCommands: |
             echo "Deploying preview for ${{ github.event.workflow_run.head_branch }}"
           command: pages deploy .output/public --project-name=${{ vars.PROJECT_NAME }} --branch=${{ github.event.workflow_run.head_branch }}
-
-      - name: Comment Preview URL on PR
-        if: success() && github.event.workflow_run.pull_requests[0]
-        uses: actions/github-script@v7
-        env:
-          PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number }}
-          DEPLOY_URL: ${{ steps.cf-deploy.outputs.deployment-url }}
-        with:
-          script: |
-            const url = process.env.DEPLOY_URL;
-            const prNumber = parseInt(process.env.PR_NUMBER, 10);
-            if (url && prNumber) {
-              github.rest.issues.createComment({
-                issue_number: prNumber,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: `🚀 **Preview Deployed!**\n\n📎 Preview URL: ${url}`
-              });
-            }
 
       - name: Notify Telegram
         if: always()
