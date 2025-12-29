@@ -1,16 +1,13 @@
 # .github/workflows/deploy-preview.yml
-name: Deploy Preview
+name: Preview
 
 on:
-  workflow_run:
-    workflows: ["CI"]
-    types:
-      - completed
+  pull_request:
     branches:
       - 'main'
 
 concurrency:
-  group: deploy-preview-${{ github.event.workflow_run.head_branch }}
+  group: preview-${{ github.head_ref }}
   cancel-in-progress: true
 
 env:
@@ -18,12 +15,34 @@ env:
   NUXT_PUBLIC_SCRIPTS_CLARITY_ID: ${{ vars.CLARITY_ID }}
 
 jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    name: Lint & Test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set Up Pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Lint
+        run: pnpm lint
+
+      - name: Run Tests
+        run: pnpm test
+
   deploy-preview:
     runs-on: ubuntu-latest
-    # Only run if CI succeeded AND it was a pull_request event
-    if: >
-      github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.event == 'pull_request'
+    needs: lint-and-test
     permissions:
       contents: read
       deployments: write
@@ -32,8 +51,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Set Up Pnpm
         uses: pnpm/action-setup@v4
@@ -57,14 +74,14 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           preCommands: |
-            echo "Deploying preview for ${{ github.event.workflow_run.head_branch }}"
-          command: pages deploy .output/public --project-name=${{ vars.PROJECT_NAME }} --branch=${{ github.event.workflow_run.head_branch }}
+            echo "Deploying preview for ${{ github.head_ref }}"
+          command: pages deploy .output/public --project-name=${{ vars.PROJECT_NAME }} --branch=${{ github.head_ref }}
 
       - name: Comment Preview URL on PR
-        if: success() && github.event.workflow_run.pull_requests[0]
+        if: success()
         uses: actions/github-script@v7
         env:
-          PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
           DEPLOY_URL: ${{ steps.cf-deploy.outputs.deployment-url }}
         with:
           script: |
@@ -87,8 +104,8 @@ jobs:
           environment: Preview
           project_name: ${{ vars.PROJECT_NAME }}
           repository: ${{ github.repository }}
-          branch: ${{ github.event.workflow_run.head_branch }}
-          author: ${{ github.event.workflow_run.actor.login }}
+          branch: ${{ github.head_ref }}
+          author: ${{ github.actor }}
           telegram_chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
           telegram_token: ${{ secrets.TELEGRAM_TOKEN }}
           preview_url: ${{ steps.cf-deploy.outputs.deployment-url }}
