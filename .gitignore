@@ -25,3 +25,5 @@ logs
 
 # Spec files
 spec
+# Sentry Config File
+.env.sentry-build-plugin
