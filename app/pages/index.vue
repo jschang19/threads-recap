@@ -55,7 +55,7 @@ async function runParseFiles() {
   }
   catch (e) {
     console.error('資料解析失敗:', e);
-    throw new Error('資料解析失敗');
+    throw new Error(`data parsing failed: ${e}`);
   }
 }
 
@@ -74,8 +74,13 @@ async function runAnalysis(parsedData: ParsedThreadsData) {
 function handleUploadError(e: unknown) {
   console.error('Analysis failed:', e);
   // Optionally show error to user here
-  toast.error(`分析失敗，請重新嘗試: ${e instanceof Error ? e.message : '未知錯誤'}`);
-  setStage('landing');
+  toast.error('出現一點問題，請刷新頁面重新上傳', {
+    description: e instanceof Error ? e.message : '未知錯誤',
+    action: {
+      label: '重新整理',
+      onClick: () => window.location.reload(),
+    },
+  });
 }
 
 // Watch for analysis errors (provided by useRecapAnalysis)
