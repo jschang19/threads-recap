@@ -45,6 +45,8 @@ async function beginUploadFlow() {
   }
   catch (e) {
     handleUploadError(e);
+    // Reset to landing stage
+    setStage('landing');
   }
 }
 
