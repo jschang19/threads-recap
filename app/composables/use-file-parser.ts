@@ -15,9 +15,18 @@ import { completeSingleMedia } from '~/utils/complete-single-media';
  */
 export function useFileParser() {
   /**
-   * Helper to parse a required file with context-aware error messages
+   * Unified file parser that handles both required and optional files
    */
-  async function parseRequiredFile<T>(file: File, fileName: string): Promise<T> {
+  async function parseFile<T>(
+    file: File | undefined,
+    fileName: string,
+    defaultValue?: T,
+  ): Promise<T> {
+    if (!file) {
+      if (defaultValue !== undefined) return defaultValue;
+      throw new Error(`Required file ${fileName} is missing`);
+    }
+
     try {
       return await parseJsonFile<T>(file);
     }
@@ -27,20 +36,20 @@ export function useFileParser() {
   }
 
   /**
-   * Helper to parse an optional file with context-aware error messages
+   * Validates that a property exists (if required) and is an array
    */
-  async function parseOptionalFile<T>(
-    file: File | undefined,
+  function validateArrayProperty(
+    value: unknown,
+    property: string,
     fileName: string,
-    defaultValue: T,
-  ): Promise<T> {
-    if (!file) return defaultValue;
-
-    try {
-      return await parseJsonFile<T>(file);
+    required: boolean,
+  ): void {
+    if (required && !value) {
+      throw new Error(`Invalid ${fileName}: missing "${property}" property`);
     }
-    catch (e) {
-      throw new Error(`Failed to parse ${fileName}: ${e instanceof Error ? e.message : 'Invalid JSON format'}`);
+
+    if (value && !Array.isArray(value)) {
+      throw new Error(`Invalid ${fileName}: "${property}" must be an array`);
     }
   }
 
@@ -49,38 +58,38 @@ export function useFileParser() {
    */
   async function parseAllFiles(files: UploadedFiles): Promise<ParsedThreadsData> {
     if (!files.threadsAndReplies) {
-      throw new Error('Lack of required files for parsing: threads_and_replies.json is required');
+      throw new Error('lack of required files for parsing: threads_and_replies.json is required');
     }
 
-    // Parse all files in parallel with better error context
+    // Parse all files in parallel
     const [threadsData, followersData, followingData, likesData, savedData] = await Promise.all([
-      parseRequiredFile<ThreadsAndRepliesResponse>(
+      parseFile<ThreadsAndRepliesResponse>(
         files.threadsAndReplies,
         'threads_and_replies.json',
       ),
-      parseOptionalFile<ThreadFollowersResponse>(
+      parseFile<ThreadFollowersResponse>(
         files.followers,
         'followers.json',
         { text_post_app_text_post_app_followers: [] },
       ),
-      parseOptionalFile<ThreadFollowingResponse>(
+      parseFile<ThreadFollowingResponse>(
         files.following,
         'following.json',
         { text_post_app_text_post_app_following: [] },
       ),
-      parseOptionalFile<ThreadLikesResponse>(
+      parseFile<ThreadLikesResponse>(
         files.likedThreads,
         'liked_threads.json',
         { text_post_app_media_likes: [] },
       ),
-      parseOptionalFile<ThreadSavedPostsResponse>(
+      parseFile<ThreadSavedPostsResponse>(
         files.savedThreads,
         'saved_threads.json',
         { text_post_app_text_post_app_saved_posts: [] },
       ),
     ]);
 
-    // Validate data structures using a loop
+    // Validate data structures using a configuration array
     const validations = [
       {
         value: threadsData.text_post_app_text_posts,
@@ -92,19 +101,19 @@ export function useFileParser() {
         value: followersData.text_post_app_text_post_app_followers,
         property: 'text_post_app_text_post_app_followers',
         fileName: 'followers.json',
-        required: false,
+        required: true,
       },
       {
         value: followingData.text_post_app_text_post_app_following,
         property: 'text_post_app_text_post_app_following',
         fileName: 'following.json',
-        required: false,
+        required: true,
       },
       {
         value: likesData.text_post_app_media_likes,
         property: 'text_post_app_media_likes',
         fileName: 'liked_threads.json',
-        required: false,
+        required: true,
       },
       {
         value: savedData.text_post_app_text_post_app_saved_posts,
@@ -114,15 +123,10 @@ export function useFileParser() {
       },
     ];
 
-    for (const { value, property, fileName, required } of validations) {
-      if (required && !value) {
-        throw new Error(`Invalid ${fileName}: missing "${property}" property`);
-      }
-
-      if (value && !Array.isArray(value)) {
-        throw new Error(`Invalid ${fileName}: "${property}" must be an array`);
-      }
-    }
+    // Validate all properties in a loop
+    validations.forEach(({ value, property, fileName, required }) => {
+      validateArrayProperty(value, property, fileName, required);
+    });
 
     // Validate posts structure before mapping
     try {
