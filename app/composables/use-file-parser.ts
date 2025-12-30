@@ -49,7 +49,7 @@ export function useFileParser() {
    */
   async function parseAllFiles(files: UploadedFiles): Promise<ParsedThreadsData> {
     if (!files.threadsAndReplies) {
-      throw new Error('lack of required files for parsing: threads_and_replies.json is required');
+      throw new Error('Lack of required files for parsing: threads_and_replies.json is required');
     }
 
     // Parse all files in parallel with better error context

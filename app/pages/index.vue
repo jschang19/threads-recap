@@ -44,9 +44,8 @@ async function beginUploadFlow() {
     setStage('recap');
   }
   catch (e) {
-    handleUploadError(e);
-    // Reset to landing stage
     setStage('landing');
+    handleUploadError(e);
   }
 }
 
@@ -56,8 +55,10 @@ async function runParseFiles() {
     return await parseAllFiles();
   }
   catch (e) {
-    console.error('資料解析失敗:', e);
-    throw new Error(`data parsing failed: ${e}`);
+    console.error('data parsing failed:', e);
+    throw new Error(
+      `data parsing failed: ${e instanceof Error ? e.message : String(e)}`,
+    );
   }
 }
 
@@ -74,7 +75,7 @@ async function runAnalysis(parsedData: ParsedThreadsData) {
 
 // Error handler for the upload/analysis process
 function handleUploadError(e: unknown) {
-  console.error('Analysis failed:', e);
+  console.error('Upload failed:', e);
   // Optionally show error to user here
   toast.error('出現一點問題，請刷新頁面重新上傳', {
     description: e instanceof Error ? e.message : '未知錯誤',
@@ -88,7 +89,14 @@ function handleUploadError(e: unknown) {
 // Watch for analysis errors (provided by useRecapAnalysis)
 watch(analysisError, (error) => {
   if (error) {
-    console.error('Analysis error:', error);
+    console.error('analysis error:', error);
+    toast.error('分析出現一點問題', {
+      description: error,
+      action: {
+        label: '重新整理',
+        onClick: () => window.location.reload(),
+      },
+    });
   }
 });
 </script>
