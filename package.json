@@ -19,12 +19,14 @@
     "@nuxt/eslint": "1.12.1",
     "@nuxt/scripts": "^0.13.2",
     "@nuxtjs/color-mode": "^3.5.2",
+    "@sentry/nuxt": "^10.32.1",
     "@vueuse/core": "^14.1.0",
     "chart.js": "^4.5.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "d3": "^7.9.0",
     "eslint": "^9.0.0",
+    "import-in-the-middle": "^2.0.1",
     "jieba-wasm": "^2.4.0",
     "lucide-vue-next": "^0.469.0",
     "motion-v": "^1.7.4",
@@ -52,5 +54,10 @@
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3",
     "vitest": "^3.2.4"
+  },
+  "pnpm": {
+    "overrides": {
+      "@vercel/nft": "^0.27.4"
+    }
   }
 }

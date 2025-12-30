@@ -4,9 +4,10 @@ import { SEO_CONFIG } from './app/constants';
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   appId: 'tks-recap',
-  modules: ['@nuxt/eslint', '@nuxt/scripts', 'motion-v/nuxt', 'shadcn-nuxt', '@nuxt/test-utils/module'],
+  modules: ['@nuxt/eslint', '@nuxt/scripts', 'motion-v/nuxt', 'shadcn-nuxt', '@nuxt/test-utils/module', '@sentry/nuxt/module'],
   ssr: false,
   devtools: { enabled: true },
+
   app: {
     head: {
       title: SEO_CONFIG.title,
@@ -29,10 +30,15 @@ export default defineNuxtConfig({
       ],
     },
   },
+
   css: ['~/assets/css/tailwind.css'],
   spaLoadingTemplate: true,
+
   runtimeConfig: {
     public: {
+      sentry: {
+        dsn: process.env.NUXT_PUBLIC_SENTRY_DSN || '',
+      },
       scripts: {
         clarity: {
           id: process.env.NUXT_PUBLIC_SCRIPTS_CLARITY_ID || 'urls3y4osz',
@@ -41,13 +47,17 @@ export default defineNuxtConfig({
       siteHost: process.env.NUXT_PUBLIC_SITE_HOST || 'https://recap.threadseeker.app',
     },
   },
+
   compatibilityDate: '2025-12-25',
+
   nitro: {
     compressPublicAssets: true,
   },
+
   vite: {
     plugins: [tailwindcss()],
   },
+
   eslint: {
     config: {
       stylistic: {
@@ -57,9 +67,19 @@ export default defineNuxtConfig({
       },
     },
   },
+
   scripts: {
     registry: {
       clarity: true,
     },
+  },
+
+  sentry: {
+    org: 'threadseeker',
+    project: 'recap-tks-frontend',
+  },
+
+  sourcemap: {
+    client: 'hidden',
   },
 });
