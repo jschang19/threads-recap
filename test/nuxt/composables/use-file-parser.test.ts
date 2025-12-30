@@ -7,7 +7,7 @@ describe('useFileParser', () => {
     const { parseAllFiles } = useFileParser();
     const files: UploadedFiles = {};
 
-    await expect(parseAllFiles(files)).rejects.toThrow('缺少討論串資料檔案');
+    await expect(parseAllFiles(files)).rejects.toThrow(/lack of required files for parsing/);
   });
 
   it('should parse valid threads data file', async () => {
@@ -141,5 +141,77 @@ describe('useFileParser', () => {
     expect(result.following).toEqual([]);
     expect(result.likes).toEqual([]);
     expect(result.savedPosts).toEqual([]);
+  });
+
+  it('should throw descriptive error for invalid JSON in threads file', async () => {
+    const { parseAllFiles } = useFileParser();
+
+    const files: UploadedFiles = {
+      threadsAndReplies: new File(['invalid json {'], 'threads_and_replies.json', {
+        type: 'application/json',
+      }),
+      followers: new File([JSON.stringify({ text_post_app_text_post_app_followers: [] })], 'followers.json', {
+        type: 'application/json',
+      }),
+      following: new File([JSON.stringify({ text_post_app_text_post_app_following: [] })], 'following.json', {
+        type: 'application/json',
+      }),
+      likedThreads: new File([JSON.stringify({ text_post_app_media_likes: [] })], 'liked_threads.json', {
+        type: 'application/json',
+      }),
+    };
+
+    await expect(parseAllFiles(files)).rejects.toThrow(/Failed to parse threads_and_replies\.json/);
+  });
+
+  it('should throw error when text_post_app_text_posts is missing', async () => {
+    const { parseAllFiles } = useFileParser();
+
+    const threadsData = {
+      // Missing text_post_app_text_posts property
+      wrong_property: [],
+    };
+
+    const files: UploadedFiles = {
+      threadsAndReplies: new File([JSON.stringify(threadsData)], 'threads_and_replies.json', {
+        type: 'application/json',
+      }),
+      followers: new File([JSON.stringify({ text_post_app_text_post_app_followers: [] })], 'followers.json', {
+        type: 'application/json',
+      }),
+      following: new File([JSON.stringify({ text_post_app_text_post_app_following: [] })], 'following.json', {
+        type: 'application/json',
+      }),
+      likedThreads: new File([JSON.stringify({ text_post_app_media_likes: [] })], 'liked_threads.json', {
+        type: 'application/json',
+      }),
+    };
+
+    await expect(parseAllFiles(files)).rejects.toThrow(/missing "text_post_app_text_posts"/);
+  });
+
+  it('should throw error when text_post_app_text_posts is not an array', async () => {
+    const { parseAllFiles } = useFileParser();
+
+    const threadsData = {
+      text_post_app_text_posts: 'not an array',
+    };
+
+    const files: UploadedFiles = {
+      threadsAndReplies: new File([JSON.stringify(threadsData)], 'threads_and_replies.json', {
+        type: 'application/json',
+      }),
+      followers: new File([JSON.stringify({ text_post_app_text_post_app_followers: [] })], 'followers.json', {
+        type: 'application/json',
+      }),
+      following: new File([JSON.stringify({ text_post_app_text_post_app_following: [] })], 'following.json', {
+        type: 'application/json',
+      }),
+      likedThreads: new File([JSON.stringify({ text_post_app_media_likes: [] })], 'liked_threads.json', {
+        type: 'application/json',
+      }),
+    };
+
+    await expect(parseAllFiles(files)).rejects.toThrow(/must be an array/);
   });
 });

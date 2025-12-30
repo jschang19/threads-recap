@@ -28,11 +28,25 @@ describe('parseJsonFile', () => {
     expect(Array.isArray(result)).toBe(true);
   });
 
-  it('should throw error for invalid JSON', async () => {
+  it('should throw descriptive error for invalid JSON', async () => {
     const content = 'not valid json {';
     const file = new File([content], 'invalid.json', { type: 'application/json' });
 
-    await expect(parseJsonFile(file)).rejects.toThrow();
+    await expect(parseJsonFile(file)).rejects.toThrow(/Invalid JSON syntax/);
+  });
+
+  it('should throw error for empty file', async () => {
+    const content = '';
+    const file = new File([content], 'empty.json', { type: 'application/json' });
+
+    await expect(parseJsonFile(file)).rejects.toThrow(/File is empty/);
+  });
+
+  it('should throw error for whitespace-only file', async () => {
+    const content = '   \n  \t  ';
+    const file = new File([content], 'whitespace.json', { type: 'application/json' });
+
+    await expect(parseJsonFile(file)).rejects.toThrow(/File is empty/);
   });
 
   it('should handle nested JSON structures', async () => {
