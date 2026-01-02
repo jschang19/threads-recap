@@ -1,6 +1,5 @@
 import type { ParsedThreadsData, TextAnalysisResult } from '~/types/threads';
 import { countCharacters, countWords, extractMentions, isIn2025 } from '../helpers';
-import { escapeHtml } from '~/utils/sanitize';
 
 /**
  * Analyze text content from posts
@@ -25,7 +24,7 @@ export function analyzeTextCore(posts: ParsedThreadsData['posts']): TextAnalysis
   }
 
   const topMentions = Array.from(mentionCounts.entries())
-    .map(([username, count]) => ({ username: escapeHtml(username), count }))
+    .map(([username, count]) => ({ username, count }))
     .sort((a, b) => b.count - a.count)
     .slice(0, 3);
 

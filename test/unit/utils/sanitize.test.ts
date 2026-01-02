@@ -1,56 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { escapeHtml, sanitizeUrl } from '~/utils/sanitize';
-
-describe('escapeHtml', () => {
-  it('should escape HTML special characters', () => {
-    expect(escapeHtml('<script>')).toBe('&lt;script&gt;');
-    expect(escapeHtml('&')).toBe('&amp;');
-    expect(escapeHtml('"')).toBe('&quot;');
-    expect(escapeHtml('\'')).toBe('&#x27;');
-  });
-
-  it('should escape all dangerous characters in a string', () => {
-    const input = '<script>alert("XSS")</script>';
-    const expected = '&lt;script&gt;alert(&quot;XSS&quot;)&lt;/script&gt;';
-    expect(escapeHtml(input)).toBe(expected);
-  });
-
-  it('should handle strings with mixed content', () => {
-    const input = 'Hello <b>World</b> & "Friends"';
-    const expected = 'Hello &lt;b&gt;World&lt;/b&gt; &amp; &quot;Friends&quot;';
-    expect(escapeHtml(input)).toBe(expected);
-  });
-
-  it('should return empty string for null/undefined/empty input', () => {
-    expect(escapeHtml('')).toBe('');
-    expect(escapeHtml(null as unknown as string)).toBe('');
-    expect(escapeHtml(undefined as unknown as string)).toBe('');
-  });
-
-  it('should return non-string inputs as empty string', () => {
-    expect(escapeHtml(123 as unknown as string)).toBe('');
-    expect(escapeHtml({} as unknown as string)).toBe('');
-    expect(escapeHtml([] as unknown as string)).toBe('');
-  });
-
-  it('should leave safe strings unchanged', () => {
-    expect(escapeHtml('hello_world')).toBe('hello_world');
-    expect(escapeHtml('user.name123')).toBe('user.name123');
-    expect(escapeHtml('正常的中文字')).toBe('正常的中文字');
-  });
-
-  it('should handle event handler injection attempts', () => {
-    const input = 'onclick="malicious()"';
-    const expected = 'onclick=&quot;malicious()&quot;';
-    expect(escapeHtml(input)).toBe(expected);
-  });
-
-  it('should handle nested script attempts', () => {
-    const input = '<<script>script>';
-    const expected = '&lt;&lt;script&gt;script&gt;';
-    expect(escapeHtml(input)).toBe(expected);
-  });
-});
+import { sanitizeUrl } from '~/utils/sanitize';
 
 describe('sanitizeUrl', () => {
   const THREADS_BASE = 'https://threads.com/';
@@ -111,9 +60,9 @@ describe('sanitizeUrl', () => {
   });
 
   it('should reject non-https base URLs', () => {
-    // If somehow a non-https base URL is used, it should fail validation
+    // sanitizeUrl must reject any non-HTTPS base URL and return an empty string
+
     expect(sanitizeUrl('http://threads.com/', 'user')).toBe('');
     expect(sanitizeUrl('ftp://threads.com/', 'user')).toBe('');
   });
 });
-
