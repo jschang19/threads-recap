@@ -32,7 +32,7 @@
             :delay="0.3 + index * 0.15"
           >
             <a
-              v-if="mentionUrls[index]"
+              v-if="mentionUrls[index] !== ''"
               :href="mentionUrls[index]"
               target="_blank"
               rel="noopener noreferrer"
@@ -118,9 +118,10 @@ const props = defineProps<Props>();
 const THREADS_BASE_URL = 'https://threads.com/';
 
 /**
- * Generate safe URLs for mention links
- * Uses sanitizeUrl to validate and construct safe https:// URLs
- */
+* Decode HTML entities in a string (e.g., "&amp;" -> "&")
+* This compensates for upstream HTML-escaping so we can
+* pass the raw username into sanitizeUrl.
+*/
 const mentionUrls = computed(() => {
   return props.result.text.topMentions.map(mention =>
     sanitizeUrl(THREADS_BASE_URL, mention.username),
