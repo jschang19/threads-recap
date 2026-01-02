@@ -1,6 +1,7 @@
 import type { KeywordCount, ParsedThreadsData } from '~/types/threads';
 import { STOP_WORDS } from '~/constants';
 import { isIn2025, simpleSegment } from '../helpers';
+import { escapeHtml } from '~/utils/sanitize';
 
 /**
  * Analyze keywords from posts (synchronous, uses Intl.Segmenter)
@@ -29,7 +30,7 @@ export function analyzeKeywordsCore(posts: ParsedThreadsData['posts']): KeywordC
   }
 
   return Array.from(keywordCounts.entries())
-    .map(([keyword, count]) => ({ keyword, count }))
+    .map(([keyword, count]) => ({ keyword: escapeHtml(keyword), count }))
     .filter(item => item.count >= 2)
     .sort((a, b) => b.count - a.count)
     .slice(0, 20);
