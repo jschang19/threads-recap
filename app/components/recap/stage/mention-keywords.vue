@@ -32,14 +32,24 @@
             :delay="0.3 + index * 0.15"
           >
             <a
-              :href="`https://threads.com/${mention.username}`"
+              v-if="mentionUrls[index] !== ''"
+              :href="mentionUrls[index]"
               target="_blank"
+              rel="noopener noreferrer"
               class="flex items-center gap-2 px-4 py-2 bg-muted rounded-full hover:bg-muted-foreground/10 transition-colors"
             >
               <span class="text-lg">{{ getMedal(index) }}</span>
               <span class="font-medium">@{{ mention.username }}</span>
               <span class="text-sm text-muted-foreground">({{ mention.count }}次)</span>
             </a>
+            <span
+              v-else
+              class="flex items-center gap-2 px-4 py-2 bg-muted rounded-full"
+            >
+              <span class="text-lg">{{ getMedal(index) }}</span>
+              <span class="font-medium">@{{ mention.username }}</span>
+              <span class="text-sm text-muted-foreground">({{ mention.count }}次)</span>
+            </span>
           </MotionBox>
         </div>
       </div>
@@ -97,12 +107,26 @@
 <script setup lang="ts">
 import { MotionBox } from '~/components/ui/motion-box';
 import type { RecapAnalysisResult } from '~/types/threads';
+import { sanitizeUrl } from '~/utils/sanitize';
 
 interface Props {
   result: RecapAnalysisResult;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
+
+const THREADS_BASE_URL = 'https://threads.com/';
+
+/**
+* Decode HTML entities in a string (e.g., "&amp;" -> "&")
+* This compensates for upstream HTML-escaping so we can
+* pass the raw username into sanitizeUrl.
+*/
+const mentionUrls = computed(() => {
+  return props.result.text.topMentions.map(mention =>
+    sanitizeUrl(THREADS_BASE_URL, mention.username),
+  );
+});
 
 function getMedal(index: number): string {
   const medals = ['🥇', '🥈', '🥉'];
